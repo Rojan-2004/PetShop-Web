@@ -1,5 +1,8 @@
 import React from 'react';
 import { FaArrowRight, FaChevronLeft, FaChevronRight, FaHeart } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
+
+
 
 const categories = [
   { name: 'Accessories', products: 84, color: 'bg-purple-300' },
@@ -15,6 +18,7 @@ const featuredProducts = [
 ];
 
 const Homepage = () => {
+  const navigate = useNavigate();
   return (
     <div className="font-sans text-gray-800">
       {/* Hero Section */}
@@ -87,7 +91,7 @@ const Homepage = () => {
             </div>
           ))}
         </div>
-      </section>
+      </section> 
     </div>
   );
 };

@@ -1,7 +1,17 @@
 import React from 'react';
+import { useForm } from 'react-hook-form';
 import { FaEnvelope, FaLock } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
+  const {register , handleSubmit} = useForm();
+  const navigate = useNavigate();
+
+  const onSubmit = (data) =>{
+    const storedUser = JSON.parse(localStorage.getItem("user")||"{}")
+    console.log(data);
+    console.log(storedUser)
+  }
   return (
     <div className="min-h-screen flex items-center justify-center bg-orange-50 px-4">
       <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-8">

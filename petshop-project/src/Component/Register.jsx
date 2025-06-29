@@ -1,7 +1,16 @@
 import React from 'react';
 import { FaUser, FaEnvelope, FaLock } from 'react-icons/fa';
+import { data, useNavigate } from 'react-router-dom';
+import { useForm} from "react-hook-form";
 
 const Register = () => {
+  const {register ,handleSubmit}=useForm();
+  const navigate = useNavigate();
+  const onSubmit = (data) =>{
+    debugger
+    localStorage.setItem("user",JSON.stringify(data));
+    alert("Registered successfully!");
+  };
   return (
     <div className="min-h-screen flex items-center justify-center bg-orange-50 px-4">
       <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-8">
@@ -53,13 +62,16 @@ const Register = () => {
             />
           </div>
 
-          {/* Submit Button */}
           <button
             type="submit"
             className="w-full py-2 bg-orange-500 text-white font-semibold rounded-full hover:bg-orange-600 transition"
           >
             Register
           </button>
+          <button onClick={handleSubmit((onSubmit) => {
+                navigate('/Homepage');
+              })} style={{ margin: '10px' }}>click me</button>
+
         </form>
 
         {/* Footer */}

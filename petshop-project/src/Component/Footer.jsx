@@ -44,8 +44,8 @@ const Footer = () => {
             <a href="#" className="hover:text-orange-500"><FaTwitter /></a>
             <a href="mailto:info@petshop.com" className="hover:text-orange-500"><FaEnvelope /></a>
           </div>
-          <p className="mt-4 text-sm">Email: info@petshop.com</p>
-          <p className="text-sm">Phone: +1 234 567 890</p>
+          <p className="mt-4 text-sm">Email: rojan.com</p>
+          <p className="text-sm">Phone: 9841994110</p>
         </div>
       </div>
 
