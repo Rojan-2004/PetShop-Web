@@ -1,5 +1,7 @@
-import jwt from "jsonwebtoken";
-import dotenv from "dotenv";
+
+const dotenv = require('dotenv');
+const jwt = require('jsonwebtoken');
+
 dotenv.config();
 
 // Middleware to verify JWT token

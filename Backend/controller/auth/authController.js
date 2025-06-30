@@ -1,5 +1,7 @@
-import { User } from "../../model/index.js";
-import { generateToken } from "../../security/jwt-util.js";
+
+
+const Users = require("../../model/userSchemas.js");
+const generateToken = require("../../security/jwt-util.js");
 
 const login = async (req, res) => {
   try {
@@ -8,9 +10,9 @@ const login = async (req, res) => {
       return res.status(500).send({ message: "email is required" });
     }
     if (req.body.password == null) {
-      return res.status(500).send({ message: "email is required" });
+      return res.status(500).send({ message: "password is required" });
     }
-    const user = await User.findOne({ where: { email: req.body.email } });
+    const user = await Users.findOne({ where: { email: req.body.email } });
     if (!user) {
       return res.status(500).send({ message: "user not found" });
     }
@@ -44,7 +46,7 @@ const init = async (req, res) => {
   }
 };
 
-export const authController = {
+module.exports = {
   login,
   init,
 };
