@@ -141,7 +141,7 @@ const OrderSuccess = () => {
                             <div className="text-sm text-gray-500">{item.quantity}</div>
                           </td>
                           <td className="px-4 py-3 whitespace-nowrap text-right">
-                            <div className="text-sm font-medium text-gray-900">${item.price.toFixed(2)}</div>
+                            <div className="text-sm font-medium text-gray-900">Rs.{item.price.toFixed(2)}</div>
                           </td>
                         </tr>
                       ))}
@@ -152,7 +152,7 @@ const OrderSuccess = () => {
                           Total:
                         </td>
                         <td className="px-4 py-3 text-right text-sm font-bold text-gray-900">
-                          ${order.total_price.toFixed(2)}
+                          Rs.{order.total_price.toFixed(2)}
                         </td>
                       </tr>
                     </tfoot>

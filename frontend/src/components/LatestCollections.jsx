@@ -30,23 +30,23 @@ const LatestCollections = () => {
     {
       id: 1,
       title: "New Arrivals 2025",
-      bookCount: "150+ Books",
-      image: "https://i.pinimg.com/1200x/f7/f7/00/f7f700826f57bbf9f725288a4b442c5e.jpg",
-      description: "Discover the latest books that just hit our shelves"
+      petCount: "150+ Pets",
+      image: "https://images.unsplash.com/photo-1601758228041-f3b2795255f1?w=600&h=400&fit=crop",
+      description: "Discover the latest pets that just arrived at our shop"
     },
     {
       id: 2,
-      title: "Award Winners",
-      bookCount: "85+ Books",
-      image: "https://i.pinimg.com/736x/1e/b8/4e/1eb84e1c3d38e1706806278297216d76.jpg",
-      description: "Celebrate excellence with award-winning literature"
+      title: "Premium Breeds",
+      petCount: "85+ Pets",
+      image: "https://images.unsplash.com/photo-1583337130417-3346a1be7dee?w=600&h=400&fit=crop",
+      description: "Celebrate excellence with premium breed companions"
     },
     {
       id: 3,
       title: "Trending Now",
-      bookCount: "120+ Books",
-      image: "https://i.pinimg.com/1200x/13/e5/d3/13e5d39632910da4d364f9c50859f041.jpg",
-      description: "What everyone is talking about right now"
+      petCount: "120+ Pets",
+      image: "https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=600&h=400&fit=crop",
+      description: "The most popular pets everyone is adopting right now"
     }
   ];
 
@@ -63,7 +63,7 @@ const LatestCollections = () => {
           }`}
         >
           <h2 className="text-4xl font-bold text-gray-900 mb-4">Latest Collections</h2>
-          <p className="text-xl text-gray-600">Discover our newest and most exciting book collections</p>
+          <p className="text-xl text-gray-600">Discover our newest and most exciting pet collections</p>
         </div>
         
         <div className="grid md:grid-cols-3 gap-8">
@@ -88,7 +88,7 @@ const LatestCollections = () => {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
                 <div className="absolute bottom-4 left-4 text-white">
                   <span className="text-sm font-medium bg-white/20 px-3 py-1 rounded-full backdrop-blur-sm">
-                    {collection.bookCount}
+                    {collection.petCount}
                   </span>
                 </div>
               </div>

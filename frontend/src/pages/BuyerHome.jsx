@@ -54,7 +54,7 @@ const BuyerHome = () => {
                 id: order.id,
                 title: item.pet_name || "Pet",
                 author: item.breed || "Unknown",
-                price: `$${typeof item.price === 'number' ? item.price.toFixed(2) : parseFloat(item.price || 0).toFixed(2)}`,
+                price: `Rs.${typeof item.price === 'number' ? item.price.toFixed(2) : parseFloat(item.price || 0).toFixed(2)}`,
                 status: order.status || "Processing",
                 date: new Date(order.created_at).toISOString().split('T')[0],
                 image: item.image_url || "https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=150&h=200&fit=crop"
@@ -71,23 +71,23 @@ const BuyerHome = () => {
           });
         }
         
-        // Fetch recommended books
+        // Fetch recommended pets
         try {
-          const booksResponse = await petService.getPublicPets();
-          const books = booksResponse.data;
+          const petsResponse = await petService.getPublicPets();
+          const pets = petsResponse.data;
           
-          // Just take the first 3 books as recommendations (in a real app, you'd use a recommendation algorithm)
-          const recommendedBooks = books.slice(0, 3).map(book => ({
-            id: book.id,
-            title: book.title || "Unknown Pet",
-            author: book.author || "Unknown Breed",
-            price: `$${typeof book.price === 'number' ? book.price.toFixed(2) : parseFloat(book.price || 0).toFixed(2)}`,
-            originalPrice: `$${(parseFloat(book.price || 0) * 1.2).toFixed(2)}`,
-            image: book.image_url || "https://images.unsplash.com/photo-1519904981063-b0cf448d479e?w=150&h=200&fit=crop",
+          // Just take the first 3 pets as recommendations (in a real app, you'd use a recommendation algorithm)
+          const recommendedPets = pets.slice(0, 3).map(pet => ({
+            id: pet.id,
+            title: pet.name || "Unknown Pet",
+            author: pet.breed || "Unknown Breed",
+            price: `Rs.${typeof pet.price === 'number' ? pet.price.toFixed(2) : parseFloat(pet.price || 0).toFixed(2)}`,
+            originalPrice: `Rs.${(parseFloat(pet.price || 0) * 1.2).toFixed(2)}`,
+            image: pet.image_url || "https://images.unsplash.com/photo-1552053831-71594a27632d?w=150&h=200&fit=crop",
             rating: (4 + Math.random()).toFixed(1),
             reason: "Based on your interests"
           }));
-          setRecommendations(recommendedBooks);
+          setRecommendations(recommendedPets);
         } catch (err) {
           console.error("Error fetching recommendations:", err);
           setRecommendations([]);
@@ -98,17 +98,17 @@ const BuyerHome = () => {
         setWishlist([
           {
             id: 1,
-            title: "Project Hail Mary",
-            author: "Andy Weir",
-            price: "$18.99",
-            image: "https://images.unsplash.com/photo-1519904981063-b0cf448d479e?w=150&h=200&fit=crop"
+            title: "Golden Retriever",
+            author: "Retriever",
+            price: "Rs.599.99",
+            image: "https://images.unsplash.com/photo-1552053831-71594a27632d?w=150&h=200&fit=crop"
           },
           {
             id: 2,
-            title: "The Silent Patient",
-            author: "Alex Michaelides",
-            price: "$15.99",
-            image: "https://i.pinimg.com/1200x/50/20/2b/50202bdc052d718bc6bd7bcfeceb791d.jpg"
+            title: "Persian Cat",
+            author: "Persian",
+            price: "Rs.399.99",
+            image: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=150&h=200&fit=crop"
           }
         ]);
       } catch (err) {
@@ -170,16 +170,16 @@ const BuyerHome = () => {
               <div>
                 <div className="inline-flex items-center bg-white/80 backdrop-blur-sm rounded-full px-4 py-2 mb-6 shadow-lg">
                   <span className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></span>
-                  <span className="text-sm font-medium text-gray-700">Welcome back, {user?.name || 'Reader'}!</span>
+                  <span className="text-sm font-medium text-gray-700">Welcome back, {user?.name || 'Pet Lover'}!</span>
                 </div>
                 
                 <h1 className="text-5xl lg:text-6xl font-bold text-gray-900 leading-tight">
                   Your Personal
-                  <span className="block text-gray-600">Reading Journey</span>
+                  <span className="block text-gray-600">Pet Journey</span>
                 </h1>
                 
                 <p className="text-xl text-gray-600 leading-relaxed max-w-lg">
-                  Discover amazing books, track your reading progress, and explore personalized recommendations crafted just for you.
+                  Discover amazing pets, track your adoption journey, and explore personalized recommendations crafted just for you.
                 </p>
               </div>
               
@@ -187,14 +187,14 @@ const BuyerHome = () => {
               <div className="grid grid-cols-3 gap-6">
                 <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-4 text-center shadow-lg hover:shadow-xl transition-all duration-300">
                   <div className="text-2xl font-bold text-gray-900">{user?.totalOrders || 0}</div>
-                  <div className="text-sm text-gray-600">Books Owned</div>
+                  <div className="text-sm text-gray-600">Pets Owned</div>
                 </div>
                 <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-4 text-center shadow-lg hover:shadow-xl transition-all duration-300">
                   <div className="text-2xl font-bold text-gray-900">{wishlist.length}</div>
                   <div className="text-sm text-gray-600">In Wishlist</div>
                 </div>
                 <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-4 text-center shadow-lg hover:shadow-xl transition-all duration-300">
-                  <div className="text-2xl font-bold text-gray-900">${user?.totalSpent || 0}</div>
+                  <div className="text-2xl font-bold text-gray-900">Rs.{user?.totalSpent || 0}</div>
                   <div className="text-sm text-gray-600">Total Spent</div>
                 </div>
               </div>
@@ -202,13 +202,13 @@ const BuyerHome = () => {
               {/* Action Buttons */}
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link
-                  to="/books"
+                  to="/pets"
                   className="group bg-gray-800 text-white px-8 py-4 rounded-xl font-semibold hover:bg-gray-700 transition-all duration-300 inline-flex items-center justify-center shadow-lg hover:shadow-xl transform hover:-translate-y-1"
                 >
                   <svg className="w-5 h-5 mr-2 group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
                   </svg>
-                  Explore Books
+                  Explore Pets
                 </Link>
                 <Link
                   to="/buyer/wishlist"
@@ -227,9 +227,9 @@ const BuyerHome = () => {
               <div className="relative group">
                 {/* Main Image */}
                 <div className="relative overflow-hidden rounded-3xl shadow-2xl transform group-hover:scale-105 transition-all duration-700">
-                  <img 
-                    src="https://i.pinimg.com/1200x/d5/e1/95/d5e1951255f25d4490eb6c4ffa8f8851.jpg" 
-                    alt="Beautiful reading setup"
+                  <img
+                    src="https://images.unsplash.com/photo-1601758228041-f3b2795255f1?w=600&h=500&fit=crop"
+                    alt="Beautiful pet care setup"
                     className="w-full h-96 lg:h-[500px] object-cover"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent"></div>
@@ -244,8 +244,8 @@ const BuyerHome = () => {
                       </svg>
                     </div>
                     <div>
-                      <div className="font-semibold text-gray-900">Reading Goal</div>
-                      <div className="text-sm text-gray-600">24/30 books</div>
+                      <div className="font-semibold text-gray-900">Adoption Goal</div>
+                      <div className="text-sm text-gray-600">2/5 pets</div>
                     </div>
                   </div>
                 </div>
@@ -281,7 +281,7 @@ const BuyerHome = () => {
                   </svg>
                 </div>
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">Total Orders</p>
+                  <p className="text-sm font-medium text-gray-600">Total Adoptions</p>
                   <p className="text-2xl font-bold text-gray-900">{user?.totalOrders || 0}</p>
                 </div>
               </div>
@@ -296,7 +296,7 @@ const BuyerHome = () => {
                 </div>
                 <div className="ml-4">
                   <p className="text-sm font-medium text-gray-600">Total Spent</p>
-                  <p className="text-2xl font-bold text-gray-900">${user?.totalSpent || 0}</p>
+                  <p className="text-2xl font-bold text-gray-900">Rs.{user?.totalSpent || 0}</p>
                 </div>
               </div>
             </div>
@@ -471,31 +471,31 @@ const BuyerHome = () => {
           <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Recommended for You</h2>
           
           <div className="grid md:grid-cols-3 gap-8">
-            {recommendations.map((book) => (
-              <div key={book.id} className="bg-white rounded-xl shadow-sm hover:shadow-lg transition-shadow p-6 group">
+            {recommendations.map((pet) => (
+              <div key={pet.id} className="bg-white rounded-xl shadow-sm hover:shadow-lg transition-shadow p-6 group">
                 <div className="relative overflow-hidden rounded-lg mb-4">
-                  <img 
-                    src={book.image} 
-                    alt={book.title}
+                  <img
+                    src={pet.image}
+                    alt={pet.title}
                     className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
                   />
                   <div className="absolute top-3 left-3">
                     <span className="bg-blue-600 text-white px-2 py-1 rounded text-xs font-medium">
-                      {book.rating} ⭐
+                      {pet.rating} ⭐
                     </span>
                   </div>
                 </div>
                 
                 <div className="mb-3">
-                  <p className="text-blue-600 text-sm font-medium mb-1">{book.reason}</p>
-                  <h3 className="font-bold text-gray-900 mb-1">{book.title}</h3>
-                  <p className="text-gray-600 text-sm">by {book.author}</p>
+                  <p className="text-blue-600 text-sm font-medium mb-1">{pet.reason}</p>
+                  <h3 className="font-bold text-gray-900 mb-1">{pet.title}</h3>
+                  <p className="text-gray-600 text-sm">{pet.author}</p>
                 </div>
                 
                 <div className="flex items-center justify-between">
                   <div>
-                    <span className="text-xl font-bold text-gray-900">{book.price}</span>
-                    <span className="text-sm text-gray-500 line-through ml-2">{book.originalPrice}</span>
+                    <span className="text-xl font-bold text-gray-900">{pet.price}</span>
+                    <span className="text-sm text-gray-500 line-through ml-2">{pet.originalPrice}</span>
                   </div>
                   <button className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors">
                     Add to Cart
@@ -515,10 +515,10 @@ const BuyerHome = () => {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20">
             <h2 className="text-3xl font-bold text-white mb-4">
-              Stay Updated with Our Latest Books! 📚
+              Stay Updated with Our Latest Pets! 🐾
             </h2>
             <p className="text-xl text-white/90 mb-8">
-              Get exclusive access to new releases, special discounts, and personalized book recommendations delivered to your inbox.
+              Get exclusive access to new arrivals, special discounts, and personalized pet recommendations delivered to your inbox.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
@@ -533,7 +533,7 @@ const BuyerHome = () => {
             </div>
             
             <p className="text-sm text-white/70 mt-4">
-              Join 10,000+ book lovers who never miss a great read. Unsubscribe anytime.
+              Join 10,000+ pet lovers who never miss a great companion. Unsubscribe anytime.
             </p>
             
             {/* Benefits */}
@@ -541,11 +541,11 @@ const BuyerHome = () => {
               <div className="text-center">
                 <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-3">
                   <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
                   </svg>
                 </div>
-                <h3 className="font-semibold text-white mb-1">New Releases</h3>
-                <p className="text-sm text-white/80">Be the first to know about new books</p>
+                <h3 className="font-semibold text-white mb-1">New Arrivals</h3>
+                <p className="text-sm text-white/80">Be the first to know about new pets</p>
               </div>
               <div className="text-center">
                 <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-3">

@@ -77,7 +77,7 @@ const PetDetail = () => {
 
       await cartService.addToCart(pet.id, 1);
       setNotification({
-        message: `Rs{pet.name} has been added to your cart!`,
+        message: `${pet.name} has been added to your cart!`,
         type: 'success'
       });
     } catch (err) {
@@ -197,13 +197,13 @@ const PetDetail = () => {
                   <button
                     key={index}
                     onClick={() => setSelectedImage(index)}
-                    className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 Rs{
+                    className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 ${
                       selectedImage === index ? 'border-blue-600' : 'border-gray-200'
                     }`}
                   >
                     <img 
                       src={image} 
-                      alt={`Rs{pet.name} Rs{index + 1}`}
+                      alt={`${pet.name} ${index + 1}`}
                       className="w-full h-full object-cover"
                     />
                   </button>
@@ -215,7 +215,7 @@ const PetDetail = () => {
           {/* Pet Details */}
           <div>
             <div className="mb-4">
-              <span className={`px-3 py-1 rounded-full text-sm font-medium Rs{getCategoryBadgeColor(pet.category)}`}>
+              <span className={`px-3 py-1 rounded-full text-sm font-medium ${getCategoryBadgeColor(pet.category)}`}>
                 {pet.category}
               </span>
             </div>
@@ -224,7 +224,7 @@ const PetDetail = () => {
             <p className="text-xl text-gray-600 mb-4">{pet.breed}</p>
             
             <div className="text-3xl font-bold text-blue-600 mb-6">
-              Rs{pet.price}
+              Rs.{pet.price}
             </div>
 
             <div className="prose prose-gray max-w-none mb-8">

@@ -245,7 +245,7 @@ const AdminPets = () => {
                         <div className="text-sm text-gray-900">{pet.age} years</div>
                       </td>
                       <td className="px-4 py-4 whitespace-nowrap">
-                        <div className="text-sm font-medium text-gray-900">${pet.price}</div>
+                        <div className="text-sm font-medium text-gray-900">Rs.{pet.price}</div>
                       </td>
                       <td className="px-4 py-4 whitespace-nowrap">
                         <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full border ${getCategoryBadgeColor(pet.category)}`}>

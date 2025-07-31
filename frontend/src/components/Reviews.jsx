@@ -35,15 +35,15 @@ const Reviews = () => {
     },
     {
       name: 'Ahmed Hassan',
-      text: 'Best online bookstore I have ever used. Great prices and excellent customer service.',
+      text: 'Best online pet shop I have ever used. Great pets and excellent customer service.',
       rating: 5,
       role: 'Regular Customer'
     },
     {
       name: 'Priya Sharma',
-      text: 'Love the user-friendly interface and the quick delivery. Highly recommended!',
+      text: 'Love the user-friendly interface and the quick pet delivery. Highly recommended!',
       rating: 5,
-      role: 'Avid Reader'
+      role: 'Pet Enthusiast'
     }
   ];
 
@@ -60,7 +60,7 @@ const Reviews = () => {
           }`}
         >
           <h2 className="text-4xl font-bold text-gray-900 mb-4">What Our Customers Say</h2>
-          <p className="text-xl text-gray-600">Real reviews from real book lovers</p>
+          <p className="text-xl text-gray-600">Real reviews from real pet lovers</p>
         </div>
         
         <div className="grid md:grid-cols-3 gap-8">

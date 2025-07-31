@@ -72,8 +72,8 @@ const PetShopLanding = () => {
       id: 1,
       title: "Golden Retriever",
       breed: "Retriever",
-      price: "$599",
-      originalPrice: "$799",
+      price: "Rs.599",
+      originalPrice: "Rs.799",
       image: "https://images.unsplash.com/photo-1552053831-71594a27632d?w=300&h=400&fit=crop",
       rating: 4.8,
       badge: "Popular"
@@ -82,8 +82,8 @@ const PetShopLanding = () => {
       id: 2,
       title: "Persian Cat",
       breed: "Persian",
-      price: "$399",
-      originalPrice: "$499",
+      price: "Rs.399",
+      originalPrice: "Rs.499",
       image: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=300&h=400&fit=crop",
       rating: 4.9,
       badge: "Bestseller"
@@ -92,8 +92,8 @@ const PetShopLanding = () => {
       id: 3,
       title: "Budgerigar",
       breed: "Parakeet",
-      price: "$49",
-      originalPrice: "$69",
+      price: "Rs.49",
+      originalPrice: "Rs.69",
       image: "https://images.unsplash.com/photo-1552728089-57bdde30beb3?w=300&h=400&fit=crop",
       rating: 4.7,
       badge: "Trending"
@@ -102,8 +102,8 @@ const PetShopLanding = () => {
       id: 4,
       title: "Holland Lop",
       breed: "Rabbit",
-      price: "$89",
-      originalPrice: "$119",
+      price: "Rs.89",
+      originalPrice: "Rs.119",
       image: "https://images.unsplash.com/photo-1585110396000-c9ffd4e4b308?w=300&h=400&fit=crop",
       rating: 4.6,
       badge: "Adorable"
@@ -115,7 +115,7 @@ const PetShopLanding = () => {
       id: 1,
       title: "Labrador Retriever",
       breed: "Retriever",
-      price: "$699",
+      price: "Rs.699",
       image: "https://images.unsplash.com/photo-1552053831-71594a27632d?w=300&h=400&fit=crop",
       sales: "500+ adopted"
     },
@@ -123,7 +123,7 @@ const PetShopLanding = () => {
       id: 2,
       title: "Maine Coon",
       breed: "Cat",
-      price: "$599",
+      price: "Rs.599",
       image: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=300&h=400&fit=crop",
       sales: "450+ adopted"
     },
@@ -131,7 +131,7 @@ const PetShopLanding = () => {
       id: 3,
       title: "Cockatiel",
       breed: "Bird",
-      price: "$79",
+      price: "Rs.79",
       image: "https://images.unsplash.com/photo-1552728089-57bdde30beb3?w=300&h=400&fit=crop",
       sales: "400+ adopted"
     },
@@ -139,7 +139,7 @@ const PetShopLanding = () => {
       id: 4,
       title: "Netherland Dwarf",
       breed: "Rabbit",
-      price: "$99",
+      price: "Rs.99",
       image: "https://images.unsplash.com/photo-1585110396000-c9ffd4e4b308?w=300&h=400&fit=crop",
       sales: "380+ adopted"
     },
@@ -147,7 +147,7 @@ const PetShopLanding = () => {
       id: 5,
       title: "Siamese Cat",
       breed: "Cat",
-      price: "$549",
+      price: "Rs.549",
       image: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=300&h=400&fit=crop",
       sales: "350+ adopted"
     }

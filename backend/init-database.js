@@ -6,45 +6,45 @@ dotenv.config();
 
 async function initDatabase() {
   try {
-    console.log('🔄 Initializing SQLite database...');
+    console.log('🔄 Initializing PostgreSQL database...');
 
     // Create users table
     await run(`
       CREATE TABLE IF NOT EXISTS users (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          name TEXT NOT NULL,
-          email TEXT UNIQUE NOT NULL,
-          password TEXT NOT NULL,
-          role TEXT DEFAULT 'buyer',
-          created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+          id SERIAL PRIMARY KEY,
+          name VARCHAR(255) NOT NULL,
+          email VARCHAR(255) UNIQUE NOT NULL,
+          password VARCHAR(255) NOT NULL,
+          role VARCHAR(50) DEFAULT 'buyer',
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
     `);
 
     // Create pets table
     await run(`
       CREATE TABLE IF NOT EXISTS pets (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          name TEXT NOT NULL,
-          species TEXT,
-          breed TEXT,
+          id SERIAL PRIMARY KEY,
+          name VARCHAR(255) NOT NULL,
+          species VARCHAR(100),
+          breed VARCHAR(100),
           age INTEGER,
           description TEXT,
-          category TEXT,
-          price REAL NOT NULL,
+          category VARCHAR(100),
+          price DECIMAL(10,2) NOT NULL,
           stock INTEGER DEFAULT 1,
           image_url TEXT,
-          created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
     `);
 
     // Create cart table
     await run(`
       CREATE TABLE IF NOT EXISTS cart (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          id SERIAL PRIMARY KEY,
           user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
           pet_id INTEGER REFERENCES pets(id) ON DELETE CASCADE,
           quantity INTEGER DEFAULT 1,
-          created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
           UNIQUE(user_id, pet_id)
       )
     `);
@@ -52,23 +52,23 @@ async function initDatabase() {
     // Create orders table
     await run(`
       CREATE TABLE IF NOT EXISTS orders (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          id SERIAL PRIMARY KEY,
           user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
-          total_price REAL NOT NULL,
-          status TEXT DEFAULT 'pending',
-          created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+          total_price DECIMAL(10,2) NOT NULL,
+          status VARCHAR(50) DEFAULT 'pending',
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
     `);
 
     // Create order_items table
     await run(`
       CREATE TABLE IF NOT EXISTS order_items (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          id SERIAL PRIMARY KEY,
           order_id INTEGER REFERENCES orders(id) ON DELETE CASCADE,
           pet_id INTEGER REFERENCES pets(id),
-          pet_name TEXT,
-          breed TEXT,
-          price REAL,
+          pet_name VARCHAR(255),
+          breed VARCHAR(100),
+          price DECIMAL(10,2),
           quantity INTEGER DEFAULT 1
       )
     `);
@@ -79,13 +79,13 @@ async function initDatabase() {
     const hashedPassword = await bcrypt.hash('admin123', 10);
 
     // Check if admin user exists
-    const existingAdmin = await query('SELECT * FROM users WHERE email = ?', ['admin@petshop.com']);
+    const existingAdmin = await query('SELECT * FROM users WHERE email = $1', ['admin@petshop.com']);
     
     if (existingAdmin.rows.length === 0) {
       // Insert default admin user
       await run(`
-        INSERT INTO users (name, email, password, role) 
-        VALUES (?, ?, ?, ?)
+        INSERT INTO users (name, email, password, role)
+        VALUES ($1, $2, $3, $4)
       `, ['Admin', 'admin@petshop.com', hashedPassword, 'admin']);
       console.log('✅ Admin user created');
     } else {
@@ -109,7 +109,7 @@ async function initDatabase() {
       for (const pet of samplePets) {
         await run(`
           INSERT INTO pets (name, species, breed, age, description, category, price, stock, image_url)
-          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+          VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
         `, pet);
       }
       console.log('✅ Sample pets inserted');
