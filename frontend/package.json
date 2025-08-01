@@ -1,5 +1,5 @@
 {
-  "name": "kitabcart-frontend",
+  "name": "petshop-frontend",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -11,7 +11,6 @@
   },
   "dependencies": {
     "axios": "^1.10.0",
-    "browserslist": "^4.25.1",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-router-dom": "^7.6.3"

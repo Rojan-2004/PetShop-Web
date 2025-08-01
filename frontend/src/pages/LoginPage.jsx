@@ -144,10 +144,10 @@ export default function LoginPage() {
               </div>
             </div>
 
-            {/* Right Side - Beautiful Pet Stack Vector */}
+            {/* Right Side - Beautiful Book Stack Vector */}
             <div className="hidden lg:flex flex-1 bg-gradient-to-br from-gray-50 to-gray-100 items-center justify-center p-12">
               <div className="max-w-lg w-full">
-                {/* Pet Stack SVG Vector */}
+                {/* Book Stack SVG Vector */}
                 <svg
                   viewBox="0 0 500 500"
                   className="w-full h-auto max-w-md mx-auto"
@@ -172,36 +172,36 @@ export default function LoginPage() {
                     </linearGradient>
                   </defs>
                   
-                  {/* Pet Stack */}
-                  {/* Pet 1 - Bottom */}
+                  {/* Book Stack */}
+                  {/* Book 1 - Bottom */}
                   <rect x="100" y="360" width="300" height="50" rx="6" fill="url(#gradient1)" />
                   <rect x="110" y="370" width="280" height="30" rx="4" fill="url(#gradient2)" />
                   <text x="250" y="390" textAnchor="middle" fill="white" fontSize="14" fontWeight="bold">
-                    Loyal Dogs
+                    Classic Literature
                   </text>
                   
-                  {/* Pet 2 */}
+                  {/* Book 2 */}
                   <rect x="90" y="300" width="320" height="55" rx="6" fill="url(#gradient2)" />
                   <rect x="100" y="310" width="300" height="35" rx="4" fill="url(#gradient3)" />
                   <text x="250" y="333" textAnchor="middle" fill="#374151" fontSize="14" fontWeight="bold">
-                    Playful Kittens
+                    Modern Fiction
                   </text>
                   
-                  {/* Pet 3 */}
+                  {/* Book 3 */}
                   <rect x="110" y="240" width="280" height="52" rx="6" fill="url(#gradient3)" />
                   <rect x="120" y="250" width="260" height="32" rx="4" fill="#F3F4F6" />
                   <text x="250" y="271" textAnchor="middle" fill="#374151" fontSize="13" fontWeight="bold">
                     Science & Technology
                   </text>
                   
-                  {/* Pet 4 */}
+                  {/* Book 4 */}
                   <rect x="120" y="185" width="260" height="48" rx="6" fill="#E5E7EB" />
                   <rect x="130" y="195" width="240" height="28" rx="4" fill="#F9FAFB" />
                   <text x="250" y="214" textAnchor="middle" fill="#374151" fontSize="12" fontWeight="bold">
                     Philosophy & Ethics
                   </text>
                   
-                  {/* Pet 5 - Top */}
+                  {/* Book 5 - Top */}
                   <rect x="130" y="135" width="240" height="45" rx="6" fill="#F3F4F6" />
                   <rect x="140" y="145" width="220" height="25" rx="4" fill="#FFFFFF" />
                   <text x="250" y="162" textAnchor="middle" fill="#374151" fontSize="12" fontWeight="bold">
@@ -221,7 +221,7 @@ export default function LoginPage() {
                   <line x1="195" y1="110" x2="180" y2="105" stroke="#6B7280" strokeWidth="3" />
                   <line x1="305" y1="110" x2="320" y2="105" stroke="#6B7280" strokeWidth="3" />
                   
-                  {/* Floating Pet Paws */}
+                  {/* Floating Book Pages */}
                   <path d="M350 160 Q360 150 370 160 Q365 170 350 160" fill="#F3F4F6" opacity="0.7" />
                   <path d="M380 200 Q390 190 400 200 Q395 210 380 200" fill="#E5E7EB" opacity="0.8" />
                   <path d="M140 100 Q150 90 160 100 Q155 110 140 100" fill="#D1D5DB" opacity="0.6" />
@@ -233,8 +233,8 @@ export default function LoginPage() {
                     Your Gateway to Knowledge
                   </h3>
                   <p className="text-gray-600 leading-relaxed">
-                    Discover thousands of pets across all types. From loyal dogs to playful kittens,
-                    find your new best friend with PetShop.
+                    Discover thousands of books across all genres. From timeless classics to contemporary bestsellers, 
+                    find your next great read with KitabCart.
                   </p>
                 </div>
 
@@ -242,7 +242,7 @@ export default function LoginPage() {
                 <div className="grid grid-cols-3 gap-6 mt-8 text-center">
                   <div>
                     <div className="text-2xl font-bold text-gray-800">10K+</div>
-                    <div className="text-sm text-gray-600">Pets</div>
+                    <div className="text-sm text-gray-600">Books</div>
                   </div>
                   <div>
                     <div className="text-2xl font-bold text-gray-800">5K+</div>

@@ -61,23 +61,19 @@ const petService = {
   getAllPets: async () => {
     return await api.get('/admin/pets');
   },
-
-  createPet: async (petData) => {
-    return await api.post('/admin/pets', petData);
-  },
-
+  
   addPet: async (petData) => {
     return await api.post('/admin/pets', petData);
   },
-
+  
   updatePet: async (id, petData) => {
     return await api.put(`/admin/pets/${id}`, petData);
   },
-
+  
   deletePet: async (id) => {
     return await api.delete(`/admin/pets/${id}`);
   },
-
+  
   // Public pet functions (for buyers)
   getPublicPets: async () => {
     try {
@@ -90,54 +86,59 @@ const petService = {
         data: [
           {
             id: 1,
-            title: "Golden Retriever",
-            breed: "Retriever",
-            price: 599.99,
-            image_url: "https://images.unsplash.com/photo-1552053831-71594a27632d?w=300&h=400&fit=crop",
-            description: "Friendly, intelligent, and devoted family dog.",
-            age: 2
+            name: "Buddy",
+            breed: "Golden Retriever",
+            price: 1200.00,
+            image_url: "https://images.unsplash.com/photo-1552053831-71594a27632d?w=400&h=400&fit=crop",
+            description: "Friendly and energetic golden retriever puppy. Great with kids and other pets.",
+            category: "Dogs",
+            stock: 3
           },
           {
             id: 2,
-            title: "Persian Cat",
-            breed: "Persian",
-            price: 399.99,
-            image_url: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=300&h=400&fit=crop",
-            description: "Affectionate, quiet, and sweet cat.",
-            age: 1
+            name: "Whiskers",
+            breed: "Persian Cat",
+            price: 800.00,
+            image_url: "https://images.unsplash.com/photo-1574144611937-0df059b5ef3e?w=400&h=400&fit=crop",
+            description: "Beautiful long-haired Persian cat with stunning blue eyes. Very calm and affectionate.",
+            category: "Cats",
+            stock: 2
           },
           {
             id: 3,
-            title: "Budgerigar",
-            breed: "Parakeet",
-            price: 49.99,
-            image_url: "https://images.unsplash.com/photo-1552728089-57bdde30beb3?w=300&h=400&fit=crop",
-            description: "Small, playful, and social bird.",
-            age: 0.5
+            name: "Charlie",
+            breed: "Beagle",
+            price: 900.00,
+            image_url: "https://images.unsplash.com/photo-1551717743-49959800b1f6?w=400&h=400&fit=crop",
+            description: "Playful beagle with excellent temperament. Perfect family companion.",
+            category: "Dogs",
+            stock: 4
           },
           {
             id: 4,
-            title: "Holland Lop",
-            breed: "Rabbit",
-            price: 89.99,
-            image_url: "https://images.unsplash.com/photo-1585110396000-c9ffd4e4b308?w=300&h=400&fit=crop",
-            description: "Gentle, friendly, and easy to handle rabbit.",
-            age: 1
+            name: "Luna",
+            breed: "Siamese Cat",
+            price: 700.00,
+            image_url: "https://images.unsplash.com/photo-1596854407944-bf87f6fdd49e?w=400&h=400&fit=crop",
+            description: "Elegant Siamese cat with striking color points. Very intelligent and vocal.",
+            category: "Cats",
+            stock: 3
           },
           {
             id: 5,
-            title: "Siamese Cat",
-            breed: "Siamese",
-            price: 549.99,
-            image_url: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=300&h=400&fit=crop",
-            description: "Vocal, affectionate, and intelligent cat.",
-            age: 2
+            name: "Max",
+            breed: "German Shepherd",
+            price: 1500.00,
+            image_url: "https://images.unsplash.com/photo-1589941013453-ec89f33b5e95?w=400&h=400&fit=crop",
+            description: "Loyal and intelligent German Shepherd. Excellent guard dog and family protector.",
+            category: "Dogs",
+            stock: 2
           }
         ]
       };
     }
   },
-
+  
   getPetById: async (id) => {
     return await api.get(`/pets/${id}`);
   },
@@ -183,9 +184,8 @@ const orderService = {
           status: 'delivered',
           total_price: 42.98,
           items: [
-            { book_id: 1, book_title: 'The Great Gatsby', quantity: 1, price: 14.99 },
-            { book_id: 2, book_title: 'To Kill a Mockingbird', quantity: 1, price: 12.99 },
-            { book_id: 3, book_title: 'Pride and Prejudice', quantity: 1, price: 15.00 }
+            { pet_id: 1, pet_name: 'Buddy', quantity: 1, price: 1200.00 },
+            { pet_id: 2, pet_name: 'Whiskers', quantity: 1, price: 800.00 }
           ]
         },
         {
@@ -195,9 +195,9 @@ const orderService = {
           user_email: 'jane@example.com',
           created_at: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
           status: 'shipped',
-          total_price: 29.99,
+          total_price: 900.00,
           items: [
-            { book_id: 4, book_title: 'The Hobbit', quantity: 1, price: 29.99 }
+            { pet_id: 3, pet_name: 'Charlie', quantity: 1, price: 900.00 }
           ]
         },
         {
@@ -207,10 +207,10 @@ const orderService = {
           user_email: 'bob@example.com',
           created_at: new Date(Date.now() - 1 * 60 * 60 * 1000).toISOString(),
           status: 'pending',
-          total_price: 24.95,
+          total_price: 1400.00,
           items: [
-            { book_id: 5, book_title: 'The Catcher in the Rye', quantity: 1, price: 11.99 },
-            { book_id: 6, book_title: '1984', quantity: 1, price: 12.96 }
+            { pet_id: 4, pet_name: 'Luna', quantity: 1, price: 700.00 },
+            { pet_id: 5, pet_name: 'Max', quantity: 1, price: 1500.00 }
           ]
         }
       ];
@@ -255,29 +255,21 @@ const orderService = {
           status: 'delivered',
           total_price: 42.98,
           items: [
-            { 
-              book_id: 1, 
-              book_title: 'The Great Gatsby', 
-              author: 'F. Scott Fitzgerald',
-              quantity: 1, 
-              price: 14.99,
-              image_url: 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=150&h=200&fit=crop'
+            {
+              pet_id: 1,
+              pet_name: 'Buddy',
+              breed: 'Golden Retriever',
+              quantity: 1,
+              price: 1200.00,
+              image_url: 'https://images.unsplash.com/photo-1552053831-71594a27632d?w=150&h=200&fit=crop'
             },
-            { 
-              book_id: 2, 
-              book_title: 'To Kill a Mockingbird', 
-              author: 'Harper Lee',
-              quantity: 1, 
-              price: 12.99,
-              image_url: 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=150&h=200&fit=crop'
-            },
-            { 
-              book_id: 3, 
-              book_title: 'Pride and Prejudice', 
-              author: 'Jane Austen',
-              quantity: 1, 
-              price: 15.00,
-              image_url: 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=150&h=200&fit=crop'
+            {
+              pet_id: 2,
+              pet_name: 'Whiskers',
+              breed: 'Persian Cat',
+              quantity: 1,
+              price: 800.00,
+              image_url: 'https://images.unsplash.com/photo-1574144611937-0df059b5ef3e?w=150&h=200&fit=crop'
             }
           ],
           delivered_date: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString() // 1 day ago
@@ -286,15 +278,15 @@ const orderService = {
           id: 1002,
           created_at: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(), // 5 days ago
           status: 'shipped',
-          total_price: 29.99,
+          total_price: 900.00,
           items: [
-            { 
-              book_id: 4, 
-              book_title: 'The Hobbit', 
-              author: 'J.R.R. Tolkien',
-              quantity: 1, 
-              price: 29.99,
-              image_url: 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=150&h=200&fit=crop'
+            {
+              pet_id: 3,
+              pet_name: 'Charlie',
+              breed: 'Beagle',
+              quantity: 1,
+              price: 900.00,
+              image_url: 'https://images.unsplash.com/photo-1551717743-49959800b1f6?w=150&h=200&fit=crop'
             }
           ],
           estimated_delivery: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString() // 2 days from now
@@ -303,23 +295,23 @@ const orderService = {
           id: 1003,
           created_at: new Date(Date.now() - 1 * 60 * 60 * 1000).toISOString(), // 1 hour ago
           status: 'pending',
-          total_price: 24.95,
+          total_price: 2200.00,
           items: [
-            { 
-              book_id: 5, 
-              book_title: 'The Catcher in the Rye', 
-              author: 'J.D. Salinger',
-              quantity: 1, 
-              price: 11.99,
-              image_url: 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=150&h=200&fit=crop'
+            {
+              pet_id: 4,
+              pet_name: 'Luna',
+              breed: 'Siamese Cat',
+              quantity: 1,
+              price: 700.00,
+              image_url: 'https://images.unsplash.com/photo-1596854407944-bf87f6fdd49e?w=150&h=200&fit=crop'
             },
-            { 
-              book_id: 6, 
-              book_title: '1984', 
-              author: 'George Orwell',
-              quantity: 1, 
-              price: 12.96,
-              image_url: 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=150&h=200&fit=crop'
+            {
+              pet_id: 5,
+              pet_name: 'Max',
+              breed: 'German Shepherd',
+              quantity: 1,
+              price: 1500.00,
+              image_url: 'https://images.unsplash.com/photo-1589941013453-ec89f33b5e95?w=150&h=200&fit=crop'
             }
           ]
         }
@@ -348,140 +340,25 @@ const orderService = {
 // Cart Services
 const cartService = {
   getCart: async () => {
-    try {
-      console.log('Fetching cart from API...');
-      const response = await api.get('/cart');
-      console.log('Cart API response:', response.data);
-      return response;
-    } catch (error) {
-      console.error('Cart service error:', error.response?.data || error.message);
-      throw error;
-    }
+    return await api.get('/cart');
   },
   
   addToCart: async (petId, quantity = 1) => {
-    try {
-      console.log('Adding to cart:', { petId, quantity });
-      const response = await api.post('/cart', { petId, quantity });
-      console.log('Add to cart response:', response.data);
-      return response;
-    } catch (error) {
-      console.error('Add to cart error:', error.response?.data || error.message);
-      throw error;
-    }
+    return await api.post('/cart', { petId, quantity });
   },
   
   updateCartItem: async (petId, quantity) => {
-    try {
-      console.log('Updating cart item:', { petId, quantity });
-      const response = await api.put('/cart', { petId, quantity });
-      console.log('Update cart response:', response.data);
-      return response;
-    } catch (error) {
-      console.error('Update cart item error:', error.response?.data || error.message);
-      throw error;
-    }
+    return await api.put('/cart', { petId, quantity });
   },
   
-  removeFromCart: async (cartItemId) => {
-    try {
-      console.log('Removing from cart:', cartItemId);
-      const response = await api.delete(`/cart/${cartItemId}`);
-      console.log('Remove from cart response:', response.data);
-      return response;
-    } catch (error) {
-      console.error('Remove from cart error:', error.response?.data || error.message);
-      throw error;
-    }
+  removeFromCart: async (petId) => {
+    return await api.delete(`/cart/${petId}`);
   },
   
   clearCart: async () => {
-    try {
-      console.log('Clearing cart...');
-      const response = await api.delete('/cart');
-      console.log('Clear cart response:', response.data);
-      return response;
-    } catch (error) {
-      console.error('Clear cart error:', error.response?.data || error.message);
-      throw error;
-    }
-  }
-};
-
-// Wishlist Services
-const wishlistService = {
-  getWishlist: async () => {
-    try {
-      console.log('Fetching wishlist from API...');
-      const response = await api.get('/wishlist');
-      console.log('Wishlist API response:', response.data);
-      return response;
-    } catch (error) {
-      console.error('Wishlist service error:', error.response?.data || error.message);
-      throw error;
-    }
-  },
-  
-  addToWishlist: async (petId) => {
-    try {
-      console.log('Adding to wishlist:', { petId });
-      const response = await api.post('/wishlist', { petId });
-      console.log('Add to wishlist response:', response.data);
-      return response;
-    } catch (error) {
-      console.error('Add to wishlist error:', error.response?.data || error.message);
-      throw error;
-    }
-  },
-  
-  removeFromWishlist: async (petId) => {
-    try {
-      console.log('Removing from wishlist:', petId);
-      const response = await api.delete(`/wishlist/${petId}`);
-      console.log('Remove from wishlist response:', response.data);
-      return response;
-    } catch (error) {
-      console.error('Remove from wishlist error:', error.response?.data || error.message);
-      throw error;
-    }
-  },
-  
-  checkWishlist: async (petId) => {
-    try {
-      console.log('Checking wishlist:', petId);
-      const response = await api.get(`/wishlist/check/${petId}`);
-      console.log('Check wishlist response:', response.data);
-      return response;
-    } catch (error) {
-      console.error('Check wishlist error:', error.response?.data || error.message);
-      throw error;
-    }
-  },
-  
-  clearWishlist: async () => {
-    try {
-      console.log('Clearing wishlist...');
-      const response = await api.delete('/wishlist');
-      console.log('Clear wishlist response:', response.data);
-      return response;
-    } catch (error) {
-      console.error('Clear wishlist error:', error.response?.data || error.message);
-      throw error;
-    }
-  },
-  
-  getWishlistCount: async () => {
-    try {
-      console.log('Getting wishlist count...');
-      const response = await api.get('/wishlist/count');
-      console.log('Wishlist count response:', response.data);
-      return response;
-    } catch (error) {
-      console.error('Wishlist count error:', error.response?.data || error.message);
-      throw error;
-    }
+    return await api.delete('/cart');
   }
 };
 
 export default api;
-export { authService, petService, userService, orderService, cartService, wishlistService };
+export { authService, petService, userService, orderService, cartService };

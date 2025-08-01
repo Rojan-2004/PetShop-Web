@@ -8,14 +8,7 @@ const {
 // Add pet
 async function addPet(req, res) {
   try {
-    const petData = { ...req.body };
-    
-    // If an image file was uploaded, use its path
-    if (req.file) {
-      petData.image_url = `/uploads/pets/${req.file.filename}`;
-    }
-    
-    const newPet = await createPet(petData);
+    const newPet = await createPet(req.body);
     res.status(201).json(newPet);
   } catch (err) {
     res.status(500).json({ message: 'Failed to add pet', error: err.message });
@@ -26,14 +19,7 @@ async function addPet(req, res) {
 async function editPet(req, res) {
   try {
     const petId = req.params.id;
-    const updateData = { ...req.body };
-    
-    // If an image file was uploaded, use its path
-    if (req.file) {
-      updateData.image_url = `/uploads/pets/${req.file.filename}`;
-    }
-    
-    const updated = await updatePet(petId, updateData);
+    const updated = await updatePet(petId, req.body);
     res.json(updated);
   } catch (err) {
     res.status(500).json({ message: 'Failed to update pet', error: err.message });

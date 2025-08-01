@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const { verifyToken, isAdmin } = require('../middleware/auth');
-const upload = require('../middleware/upload');
 
 const {
   addPet,
@@ -11,8 +10,8 @@ const {
 } = require('../controllers/petController');
 
 // 🧑‍💼 Admin-only pet routes
-router.post('/pets', verifyToken, isAdmin, upload.single('image'), addPet);
-router.put('/pets/:id', verifyToken, isAdmin, upload.single('image'), editPet);
+router.post('/pets', verifyToken, isAdmin, addPet);
+router.put('/pets/:id', verifyToken, isAdmin, editPet);
 router.delete('/pets/:id', verifyToken, isAdmin, removePet);
 router.get('/pets', verifyToken, isAdmin, fetchPets);
 

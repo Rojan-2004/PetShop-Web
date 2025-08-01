@@ -5,7 +5,7 @@ import Reviews from '../components/Reviews';
 
 const AdminHome = () => {
   const [stats, setStats] = useState({
-    totalPets: 0,
+    totalBooks: 0,
     totalUsers: 0,
     totalOrders: 0,
     revenue: 0
@@ -15,7 +15,7 @@ const AdminHome = () => {
   useEffect(() => {
     // Simulate API call
     setStats({
-      totalPets: 1247,
+      totalBooks: 1247,
       totalUsers: 892,
       totalOrders: 156,
       revenue: 45280
@@ -24,10 +24,10 @@ const AdminHome = () => {
 
   const quickActions = [
     {
-      title: 'Add New Pet',
-      description: 'Add pets to your inventory',
-      icon: '🐾',
-      link: '/admin/pets',
+      title: 'Add New Book',
+      description: 'Add books to your inventory',
+      icon: '📚',
+      link: '/admin/books',
       color: 'bg-blue-50 hover:bg-blue-100 border-blue-200'
     },
     {
@@ -54,11 +54,11 @@ const AdminHome = () => {
   ];
 
   const recentActivities = [
-    { action: 'New order received', details: 'Order #1234 - Rs.89.99', time: '2 minutes ago', type: 'order' },
-    { action: 'Pet added', details: 'Golden Retriever added to inventory', time: '15 minutes ago', type: 'pet' },
+    { action: 'New order received', details: 'Order #1234 - $89.99', time: '2 minutes ago', type: 'order' },
+    { action: 'Book added', details: 'The Great Gatsby added to inventory', time: '15 minutes ago', type: 'book' },
     { action: 'User registered', details: 'john.doe@email.com joined', time: '1 hour ago', type: 'user' },
     { action: 'Order completed', details: 'Order #1230 delivered successfully', time: '2 hours ago', type: 'order' },
-    { action: 'Pet updated', details: 'Persian Cat - Price updated', time: '3 hours ago', type: 'pet' }
+    { action: 'Book updated', details: 'Atomic Habits - Price updated', time: '3 hours ago', type: 'book' }
   ];
 
   return (
@@ -70,7 +70,7 @@ const AdminHome = () => {
             <div>
               <h1 className="text-4xl font-bold mb-2">Admin Dashboard 🚀</h1>
               <p className="text-gray-200 text-lg mb-4">
-                Manage your pet shop efficiently with these powerful tools and insights.
+                Manage your bookstore efficiently with these powerful tools and insights.
               </p>
               <div className="flex items-center space-x-6 text-sm text-gray-300">
                 <span className="flex items-center">
@@ -88,13 +88,13 @@ const AdminHome = () => {
               </div>
             </div>              <div className="mt-6 md:mt-0 flex flex-col sm:flex-row gap-3">
                 <Link 
-                  to="/admin/pets"
+                  to="/admin/books"
                   className="bg-white text-gray-800 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors inline-flex items-center"
                 >
                   <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                    <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
                   </svg>
-                  Manage Pets
+                  Manage Books
                 </Link>
                 <button className="border-2 border-white text-white px-6 py-3 rounded-lg font-semibold hover:bg-white hover:text-gray-800 transition-colors inline-flex items-center">
                   <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
@@ -111,11 +111,11 @@ const AdminHome = () => {
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600 mb-1">Total Pets</p>
-                <p className="text-2xl font-bold text-gray-900">{stats.totalPets.toLocaleString()}</p>
+                <p className="text-sm text-gray-600 mb-1">Total Books</p>
+                <p className="text-2xl font-bold text-gray-900">{stats.totalBooks.toLocaleString()}</p>
               </div>
               <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                <span className="text-blue-600 text-xl">🐾</span>
+                <span className="text-blue-600 text-xl">📚</span>
               </div>
             </div>
           </div>
@@ -148,7 +148,7 @@ const AdminHome = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600 mb-1">Revenue</p>
-                <p className="text-2xl font-bold text-gray-900">Rs.{stats.revenue.toLocaleString()}</p>
+                <p className="text-2xl font-bold text-gray-900">${stats.revenue.toLocaleString()}</p>
               </div>
               <div className="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
                 <span className="text-yellow-600 text-xl">💰</span>
@@ -191,10 +191,10 @@ const AdminHome = () => {
                   <div key={index} className="flex items-start space-x-3 pb-4 border-b border-gray-100 last:border-b-0 last:pb-0">
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs ${
                       activity.type === 'order' ? 'bg-green-100 text-green-600' :
-                      activity.type === 'pet' ? 'bg-blue-100 text-blue-600' :
+                      activity.type === 'book' ? 'bg-blue-100 text-blue-600' :
                       'bg-purple-100 text-purple-600'
                     }`}>
-                      {activity.type === 'order' ? '📦' : activity.type === 'pet' ? '🐾' : '👤'}
+                      {activity.type === 'order' ? '📦' : activity.type === 'book' ? '📚' : '👤'}
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-medium text-gray-900">{activity.action}</p>
@@ -250,7 +250,7 @@ const AdminHome = () => {
               Admin Updates & Insights 🚀
             </h2>
             <p className="text-xl text-white/90 mb-8">
-              Stay informed about platform updates, sales analytics, and business insights to grow your pet shop.
+              Stay informed about platform updates, sales analytics, and business insights to grow your bookstore.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">

@@ -37,7 +37,6 @@ const Header = () => {
   };
 
   const navigateTo = (path) => {
-    // Always navigate even if we're already on a similar path
     navigate(path);
     setIsMobileMenuOpen(false);
   };
@@ -51,7 +50,6 @@ const Header = () => {
     setUser(null);
     setIsAdmin(false);
     
-    // Dispatch custom event to notify other components
     window.dispatchEvent(new Event('userStateChanged'));
     
     navigateTo('/');
@@ -67,7 +65,8 @@ const Header = () => {
               className="text-2xl font-bold text-gray-800 hover:text-gray-600 transition-colors cursor-pointer"
               onClick={(e) => handleHomeClick(e)}
             >
-              {isAdmin ? 'PetShop Admin' : 'PetShop'}
+              {/* BRAND NAME CHANGE */}
+              {isAdmin ? 'Petshop Admin' : 'Petshop'}
             </Link>
           </div>
           
@@ -79,40 +78,28 @@ const Header = () => {
                 <>
                   <Link 
                     to="/admin" 
-                    onClick={(e) => {
-                      e.preventDefault();
-                      navigateTo('/admin');
-                    }}
+                    onClick={() => navigateTo('/admin')} // Simplified onClick
                     className="text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium"
                   >
                     Dashboard
                   </Link>
                   <Link 
-                    to="/admin/Pets" 
-                    onClick={(e) => {
-                      e.preventDefault();
-                      navigateTo('/admin/Pets');
-                    }}
+                    to="/admin/pets" // Rebranded path
+                    onClick={() => navigateTo('/admin/pets')} // Simplified onClick
                     className="text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium"
                   >
-                    Pets
+                    Pets {/* Rebranded text */}
                   </Link>
                   <Link 
                     to="/admin/users" 
-                    onClick={(e) => {
-                      e.preventDefault();
-                      navigateTo('/admin/users');
-                    }}
+                    onClick={() => navigateTo('/admin/users')} // Simplified onClick
                     className="text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium"
                   >
                     Users
                   </Link>
                   <Link 
                     to="/admin/orders" 
-                    onClick={(e) => {
-                      e.preventDefault();
-                      navigateTo('/admin/orders');
-                    }}
+                    onClick={() => navigateTo('/admin/orders')} // Simplified onClick
                     className="text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium"
                   >
                     Orders
@@ -123,43 +110,31 @@ const Header = () => {
                 <>
                   <Link 
                     to="/" 
-                    onClick={(e) => {
-                      e.preventDefault();
-                      navigateTo('/');
-                    }}
+                    onClick={() => navigateTo('/')} // Simplified onClick
                     className="text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium transition-all duration-300 hover:scale-105"
                   >
                     Home
                   </Link>
                   <Link 
-                    to="/pets" 
-                    onClick={(e) => {
-                      e.preventDefault();
-                      navigateTo('/pets');
-                    }}
+                    to="/pets" // Rebranded path
+                    onClick={() => navigateTo('/pets')} // Simplified onClick
                     className="text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium transition-all duration-300 hover:scale-105"
                   >
-                    Pets
+                    Pets {/* Rebranded text */}
                   </Link>
                   
                   {user && (
                     <>
                       <Link 
                         to="/cart" 
-                        onClick={(e) => {
-                          e.preventDefault();
-                          navigateTo('/cart');
-                        }}
+                        onClick={() => navigateTo('/cart')} // Simplified onClick
                         className="text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium transition-all duration-300 hover:scale-105"
                       >
                         Cart
                       </Link>
                       <Link 
                         to="/orders" 
-                        onClick={(e) => {
-                          e.preventDefault();
-                          navigateTo('/orders');
-                        }}
+                        onClick={() => navigateTo('/orders')} // Simplified onClick
                         className="text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium transition-all duration-300 hover:scale-105"
                       >
                         Orders
@@ -169,7 +144,7 @@ const Header = () => {
                 </>
               )}
               
-              {/* Authentication Buttons */}
+              {/* Authentication Buttons (No changes needed here) */}
               {user ? (
                 <div className="flex items-center space-x-4">
                   <div className="bg-gray-100 rounded-full px-3 py-1 text-sm font-medium text-gray-700">
@@ -186,20 +161,14 @@ const Header = () => {
                 <div className="flex items-center space-x-4">
                   <Link 
                     to="/login" 
-                    onClick={(e) => {
-                      e.preventDefault();
-                      navigateTo('/login');
-                    }}
+                    onClick={() => navigateTo('/login')} // Simplified onClick
                     className="bg-gray-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-gray-700 transition-all duration-300 transform hover:scale-105"
                   >
                     Login
                   </Link>
                   <Link 
                     to="/signup" 
-                    onClick={(e) => {
-                      e.preventDefault();
-                      navigateTo('/signup');
-                    }}
+                    onClick={() => navigateTo('/signup')} // Simplified onClick
                     className="bg-gray-800 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-gray-900 transition-all duration-300 transform hover:scale-105"
                   >
                     Sign Up
@@ -209,7 +178,7 @@ const Header = () => {
             </div>
           </div>
 
-          {/* Mobile menu button */}
+          {/* Mobile menu button (No changes needed) */}
           <div className="md:hidden">
             <button
               onClick={toggleMobileMenu}
@@ -231,39 +200,28 @@ const Header = () => {
                 <>
                   <Link 
                     to="/admin" 
-                    onClick={(e) => {
-                      e.preventDefault();
-                      navigateTo('/admin');
-                    }}
+                    onClick={() => navigateTo('/admin')}
                     className="block text-gray-700 hover:text-gray-900 px-3 py-2 text-base font-medium"
                   >
                     Dashboard
                   </Link>
                   <Link 
-                    to="/admin/Pets" 
-                    onClick={(e) => {
-                      e.preventDefault();
-                      navigateTo('/admin/Pets');
-                    }}
+                    to="/admin/pets" // Rebranded path
+                    onClick={() => navigateTo('/admin/pets')}
                     className="block text-gray-700 hover:text-gray-900 px-3 py-2 text-base font-medium"
                   >
+                    Pets {/* Rebranded text */}
                   </Link>
                   <Link 
                     to="/admin/users" 
-                    onClick={(e) => {
-                      e.preventDefault();
-                      navigateTo('/admin/users');
-                    }}
+                    onClick={() => navigateTo('/admin/users')}
                     className="block text-gray-700 hover:text-gray-900 px-3 py-2 text-base font-medium"
                   >
                     Users
                   </Link>
                   <Link 
                     to="/admin/orders" 
-                    onClick={(e) => {
-                      e.preventDefault();
-                      navigateTo('/admin/orders');
-                    }}
+                    onClick={() => navigateTo('/admin/orders')}
                     className="block text-gray-700 hover:text-gray-900 px-3 py-2 text-base font-medium"
                   >
                     Orders
@@ -285,43 +243,31 @@ const Header = () => {
                 <>
                   <Link 
                     to="/" 
-                    onClick={(e) => {
-                      e.preventDefault();
-                      navigateTo('/');
-                    }}
+                    onClick={() => navigateTo('/')}
                     className="block text-gray-700 hover:text-gray-900 px-3 py-2 text-base font-medium"
                   >
                     Home
                   </Link>
-                  <Link 
-                    to="/pets" 
-                    onClick={(e) => {
-                      e.preventDefault();
-                      navigateTo('/pets');
-                    }}
+                  <Link
+                    to="/pets" // Rebranded path
+                    onClick={() => navigateTo('/pets')}
                     className="block text-gray-700 hover:text-gray-900 px-3 py-2 text-base font-medium"
                   >
-                    Pets
+                    Pets {/* Rebranded text */}
                   </Link>
                   
                   {user ? (
                     <>
                       <Link 
                         to="/cart" 
-                        onClick={(e) => {
-                          e.preventDefault();
-                          navigateTo('/cart');
-                        }}
+                        onClick={() => navigateTo('/cart')}
                         className="block text-gray-700 hover:text-gray-900 px-3 py-2 text-base font-medium"
                       >
                         Cart
                       </Link>
                       <Link 
                         to="/orders" 
-                        onClick={(e) => {
-                          e.preventDefault();
-                          navigateTo('/orders');
-                        }}
+                        onClick={() => navigateTo('/orders')}
                         className="block text-gray-700 hover:text-gray-900 px-3 py-2 text-base font-medium"
                       >
                         Orders
@@ -342,20 +288,14 @@ const Header = () => {
                     <div className="mt-2 space-y-2">
                       <Link 
                         to="/login" 
-                        onClick={(e) => {
-                          e.preventDefault();
-                          navigateTo('/login');
-                        }}
+                        onClick={() => navigateTo('/login')}
                         className="block bg-gray-600 text-white px-3 py-2 rounded-md text-base font-medium hover:bg-gray-700"
                       >
                         Login
                       </Link>
                       <Link 
                         to="/signup" 
-                        onClick={(e) => {
-                          e.preventDefault();
-                          navigateTo('/signup');
-                        }}
+                        onClick={() => navigateTo('/signup')}
                         className="block bg-gray-800 text-white px-3 py-2 rounded-md text-base font-medium hover:bg-gray-900"
                       >
                         Sign Up

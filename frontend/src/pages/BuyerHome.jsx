@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import LatestCollections from '../components/LatestCollections';
-import { orderService, petService, cartService, wishlistService } from '../services/api';
+import { orderService, petService } from '../services/api';
 import Notification from '../components/Notification';
 
 const BuyerHome = () => {
@@ -54,7 +54,7 @@ const BuyerHome = () => {
                 id: order.id,
                 title: item.pet_name || "Pet",
                 author: item.breed || "Unknown",
-                price: `Rs.${typeof item.price === 'number' ? item.price.toFixed(2) : parseFloat(item.price || 0).toFixed(2)}`,
+                price: `$${typeof item.price === 'number' ? item.price.toFixed(2) : parseFloat(item.price || 0).toFixed(2)}`,
                 status: order.status || "Processing",
                 date: new Date(order.created_at).toISOString().split('T')[0],
                 image: item.image_url || "https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=150&h=200&fit=crop"
@@ -81,11 +81,11 @@ const BuyerHome = () => {
             id: pet.id,
             title: pet.name || "Unknown Pet",
             author: pet.breed || "Unknown Breed",
-            price: `Rs.${typeof pet.price === 'number' ? pet.price.toFixed(2) : parseFloat(pet.price || 0).toFixed(2)}`,
-            originalPrice: `Rs.${(parseFloat(pet.price || 0) * 1.2).toFixed(2)}`,
-                            image: pet.image_url?.startsWith('http') ? pet.image_url : `http://localhost:3081${pet.image_url}` || "https://images.unsplash.com/photo-1552053831-71594a27632d?w=150&h=200&fit=crop",
+            price: `$${typeof pet.price === 'number' ? pet.price.toFixed(2) : parseFloat(pet.price || 0).toFixed(2)}`,
+            originalPrice: `$${(parseFloat(pet.price || 0) * 1.2).toFixed(2)}`,
+            image: pet.image_url || "https://images.unsplash.com/photo-1601758228041-f3b2795255f1?w=150&h=200&fit=crop",
             rating: (4 + Math.random()).toFixed(1),
-            reason: "Based on your interests"
+            reason: "Perfect for your family"
           }));
           setRecommendations(recommendedPets);
         } catch (err) {
@@ -93,38 +93,24 @@ const BuyerHome = () => {
           setRecommendations([]);
         }
         
-        // Fetch wishlist from API
-        try {
-          const wishlistResponse = await wishlistService.getWishlist();
-          const wishlistData = wishlistResponse.data || [];
-          const formattedWishlist = wishlistData.map(item => ({
-            id: item.id,
-            title: item.title,
-            author: item.breed,
-            price: `Rs.${item.price}`,
-            image: item.image_url
-          }));
-          setWishlist(formattedWishlist);
-        } catch (err) {
-          console.error("Error fetching wishlist:", err);
-          // Use placeholder data if API fails
-          setWishlist([
-            {
-              id: 1,
-              title: "Golden Retriever",
-              author: "Retriever",
-              price: "Rs.599.99",
-              image: "https://images.unsplash.com/photo-1552053831-71594a27632d?w=150&h=200&fit=crop"
-            },
-            {
-              id: 2,
-              title: "Persian Cat",
-              author: "Persian",
-              price: "Rs.399.99",
-              image: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=150&h=200&fit=crop"
-            }
-          ]);
-        }
+        // In a real app, you'd fetch the wishlist from the API
+        // For now, we'll just use a placeholder
+        setWishlist([
+          {
+            id: 1,
+            title: "Golden Retriever Puppy",
+            author: "Golden Retriever",
+            price: "$1,200.00",
+            image: "https://images.unsplash.com/photo-1552053831-71594a27632d?w=150&h=200&fit=crop"
+          },
+          {
+            id: 2,
+            title: "Persian Cat",
+            author: "Persian",
+            price: "$800.00",
+            image: "https://images.unsplash.com/photo-1574144611937-0df059b5ef3e?w=150&h=200&fit=crop"
+          }
+        ]);
       } catch (err) {
         console.error("Error fetching data:", err);
         setNotification({
@@ -139,31 +125,6 @@ const BuyerHome = () => {
     fetchData();
   }, []);
 
-  const handleAddToCart = async (petId) => {
-    try {
-      const token = localStorage.getItem('token');
-      
-      if (!token) {
-        setNotification({
-          message: 'Please login to add pets to your cart.',
-          type: 'error'
-        });
-        return;
-      }
-
-      await cartService.addToCart(petId, 1);
-      setNotification({
-        message: 'Pet added to cart successfully!',
-        type: 'success'
-      });
-    } catch (err) {
-      console.error('Error adding to cart:', err);
-      setNotification({
-        message: 'Failed to add pet to cart. Please try again.',
-        type: 'error'
-      });
-    }
-  };
 
   const getStatusColor = (status) => {
     switch (status) {
@@ -209,7 +170,7 @@ const BuyerHome = () => {
               <div>
                 <div className="inline-flex items-center bg-white/80 backdrop-blur-sm rounded-full px-4 py-2 mb-6 shadow-lg">
                   <span className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></span>
-                  <span className="text-sm font-medium text-gray-700">Welcome back, {user?.name || 'Pet Lover'}!</span>
+                  <span className="text-sm font-medium text-gray-700">Welcome back, {user?.name || 'Reader'}!</span>
                 </div>
                 
                 <h1 className="text-5xl lg:text-6xl font-bold text-gray-900 leading-tight">
@@ -218,7 +179,7 @@ const BuyerHome = () => {
                 </h1>
                 
                 <p className="text-xl text-gray-600 leading-relaxed max-w-lg">
-                  Discover amazing pets, track your adoption journey, and explore personalized recommendations crafted just for you.
+                  Discover amazing pets, track your adoption progress, and explore personalized recommendations crafted just for you.
                 </p>
               </div>
               
@@ -226,14 +187,14 @@ const BuyerHome = () => {
               <div className="grid grid-cols-3 gap-6">
                 <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-4 text-center shadow-lg hover:shadow-xl transition-all duration-300">
                   <div className="text-2xl font-bold text-gray-900">{user?.totalOrders || 0}</div>
-                  <div className="text-sm text-gray-600">Pets Owned</div>
+                  <div className="text-sm text-gray-600">Pets Adopted</div>
                 </div>
                 <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-4 text-center shadow-lg hover:shadow-xl transition-all duration-300">
                   <div className="text-2xl font-bold text-gray-900">{wishlist.length}</div>
                   <div className="text-sm text-gray-600">In Wishlist</div>
                 </div>
                 <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-4 text-center shadow-lg hover:shadow-xl transition-all duration-300">
-                  <div className="text-2xl font-bold text-gray-900">Rs.{user?.totalSpent || 0}</div>
+                  <div className="text-2xl font-bold text-gray-900">${user?.totalSpent || 0}</div>
                   <div className="text-sm text-gray-600">Total Spent</div>
                 </div>
               </div>
@@ -245,7 +206,7 @@ const BuyerHome = () => {
                   className="group bg-gray-800 text-white px-8 py-4 rounded-xl font-semibold hover:bg-gray-700 transition-all duration-300 inline-flex items-center justify-center shadow-lg hover:shadow-xl transform hover:-translate-y-1"
                 >
                   <svg className="w-5 h-5 mr-2 group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.94-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
                   </svg>
                   Explore Pets
                 </Link>
@@ -268,7 +229,7 @@ const BuyerHome = () => {
                 <div className="relative overflow-hidden rounded-3xl shadow-2xl transform group-hover:scale-105 transition-all duration-700">
                   <img
                     src="https://images.unsplash.com/photo-1601758228041-f3b2795255f1?w=600&h=500&fit=crop"
-                    alt="Beautiful pet care setup"
+                    alt="Happy pets in loving environment"
                     className="w-full h-96 lg:h-[500px] object-cover"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent"></div>
@@ -284,7 +245,7 @@ const BuyerHome = () => {
                     </div>
                     <div>
                       <div className="font-semibold text-gray-900">Adoption Goal</div>
-                      <div className="text-sm text-gray-600">2/5 pets</div>
+                      <div className="text-sm text-gray-600">2/3 pets</div>
                     </div>
                   </div>
                 </div>
@@ -320,7 +281,7 @@ const BuyerHome = () => {
                   </svg>
                 </div>
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">Total Adoptions</p>
+                  <p className="text-sm font-medium text-gray-600">Total Orders</p>
                   <p className="text-2xl font-bold text-gray-900">{user?.totalOrders || 0}</p>
                 </div>
               </div>
@@ -335,7 +296,7 @@ const BuyerHome = () => {
                 </div>
                 <div className="ml-4">
                   <p className="text-sm font-medium text-gray-600">Total Spent</p>
-                  <p className="text-2xl font-bold text-gray-900">Rs.{user?.totalSpent || 0}</p>
+                  <p className="text-2xl font-bold text-gray-900">${user?.totalSpent || 0}</p>
                 </div>
               </div>
             </div>
@@ -517,9 +478,6 @@ const BuyerHome = () => {
                     src={pet.image}
                     alt={pet.title}
                     className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
-                    onError={(e) => {
-                      e.target.src = 'https://images.unsplash.com/photo-1552053831-71594a27632d?w=300&h=400&fit=crop';
-                    }}
                   />
                   <div className="absolute top-3 left-3">
                     <span className="bg-blue-600 text-white px-2 py-1 rounded text-xs font-medium">
@@ -539,11 +497,8 @@ const BuyerHome = () => {
                     <span className="text-xl font-bold text-gray-900">{pet.price}</span>
                     <span className="text-sm text-gray-500 line-through ml-2">{pet.originalPrice}</span>
                   </div>
-                  <button
-                    onClick={() => handleAddToCart(pet.id)}
-                    className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
-                  >
-                    Add to Cart
+                  <button className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors">
+                    Adopt Now
                   </button>
                 </div>
               </div>
@@ -586,7 +541,7 @@ const BuyerHome = () => {
               <div className="text-center">
                 <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-3">
                   <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                    <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
                   </svg>
                 </div>
                 <h3 className="font-semibold text-white mb-1">New Arrivals</h3>

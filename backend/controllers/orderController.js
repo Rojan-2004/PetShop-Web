@@ -19,7 +19,7 @@ async function placeOrder(req, res) {
 
     // Add order items
     for (const item of cartItems) {
-      await addOrderItem(order.id, item.bookId, item.quantity, item.price);
+      await addOrderItem(order.id, item.petId, item.quantity, item.price);
     }
 
     res.status(201).json({ message: 'Order placed successfully', orderId: order.id });
@@ -47,9 +47,9 @@ async function getUserOrders(req, res) {
     // Get order items for each order
     for (const order of orders) {
       const itemsResult = await db.query(`
-        SELECT oi.book_id, oi.quantity, oi.price, b.title as book_title, b.author, b.image_url
+        SELECT oi.pet_id, oi.quantity, oi.price, p.name as pet_name, p.breed, p.image_url
         FROM order_items oi
-        JOIN books b ON oi.book_id = b.id
+        JOIN pets p ON oi.pet_id = p.id
         WHERE oi.order_id = $1
       `, [order.id]);
       
@@ -80,9 +80,9 @@ async function getAllOrders(req, res) {
     // Get order items for each order
     for (const order of orders) {
       const itemsResult = await db.query(`
-        SELECT oi.book_id, oi.quantity, oi.price, b.title as book_title
+        SELECT oi.pet_id, oi.quantity, oi.price, p.name as pet_name
         FROM order_items oi
-        JOIN books b ON oi.book_id = b.id
+        JOIN pets p ON oi.pet_id = p.id
         WHERE oi.order_id = $1
       `, [order.id]);
       

@@ -1,65 +1,39 @@
 // models/orderModel.js
-const { query, run } = require('../db');
+const db = require('../db');
 
 // Create an order record
 async function createOrder(userId, totalPrice) {
-  const result = await run(
+  const result = await db.query(
     `INSERT INTO orders (user_id, total_price)
-     VALUES (?, ?)`,
+     VALUES ($1, $2) RETURNING *`,
     [userId, totalPrice]
   );
-  
-  // Get the created order
-  const createdOrder = await query('SELECT * FROM orders WHERE id = ?', [result.lastID]);
-  return createdOrder.rows[0];
+  return result.rows[0];
 }
 
 // Add order items
-async function addOrderItem(orderId, petId, petName, breed, quantity, price) {
-  await run(
-    `INSERT INTO order_items (order_id, pet_id, pet_name, breed, quantity, price)
-     VALUES (?, ?, ?, ?, ?, ?)`,
-    [orderId, petId, petName, breed, quantity, price]
+async function addOrderItem(orderId, petId, quantity, price) {
+  await db.query(
+    `INSERT INTO order_items (order_id, pet_id, quantity, price)
+     VALUES ($1, $2, $3, $4)`,
+    [orderId, petId, quantity, price]
   );
 }
 
-// Get cart items with pet details
+// Get cart items with pet price
 async function getCartItemsWithDetails(userId) {
-  const result = await query(`
-    SELECT c.pet_id, c.quantity, p.price, p.name, p.breed
-    FROM cart c
-    JOIN pets p ON c.pet_id = p.id
-    WHERE c.user_id = ?
+  const result = await db.query(`
+    SELECT ci.pet_id, ci.quantity, p.price
+    FROM cart_items ci
+    JOIN pets p ON ci.pet_id = p.id
+    WHERE ci.user_id = $1
   `, [userId]);
   return result.rows;
 }
 
 // Clear user's cart after order
 async function clearCart(userId) {
-  await query(`DELETE FROM cart WHERE user_id = ?`, [userId]);
-}
-
-// Get user orders
-async function getUserOrders(userId) {
-  const result = await query(`
-    SELECT o.*, oi.*
-    FROM orders o
-    LEFT JOIN order_items oi ON o.id = oi.order_id
-    WHERE o.user_id = ?
-    ORDER BY o.created_at DESC
-  `, [userId]);
-  return result.rows;
-}
-
-// Get all orders (for admin)
-async function getAllOrders() {
-  const result = await query(`
-    SELECT o.*, u.name as user_name, u.email as user_email
-    FROM orders o
-    JOIN users u ON o.user_id = u.id
-    ORDER BY o.created_at DESC
-  `);
-  return result.rows;
+  await db.query(`DELETE FROM cart_items WHERE user_id = $1`, [userId]);
 }
 
 module.exports = {
@@ -67,6 +41,4 @@ module.exports = {
   addOrderItem,
   getCartItemsWithDetails,
   clearCart,
-  getUserOrders,
-  getAllOrders
 };

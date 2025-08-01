@@ -33,9 +33,9 @@ router.get('/latest', verifyToken, async (req, res) => {
     
     // Get order items
     const itemsResult = await db.query(`
-      SELECT oi.book_id, oi.quantity, oi.price, b.title as book_title
+      SELECT oi.pet_id, oi.quantity, oi.price, p.name as pet_name, p.image_url
       FROM order_items oi
-      JOIN books b ON oi.book_id = b.id
+      JOIN pets p ON oi.pet_id = p.id
       WHERE oi.order_id = $1
     `, [order.id]);
     

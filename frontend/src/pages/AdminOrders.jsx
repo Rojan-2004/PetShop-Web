@@ -20,11 +20,11 @@ const AdminOrders = () => {
     
     // Check if it's a valid number
     if (numValue !== null && numValue !== undefined && !isNaN(numValue)) {
-      return `Rs.${numValue.toFixed(2)}`;
+      return `$${numValue.toFixed(2)}`;
     }
     
     // Return a default value if not valid
-    return 'Rs.0.00';
+    return '$0.00';
   };
 
   // OPTIMIZED: Memoized fetchOrders function to prevent unnecessary re-renders
@@ -49,8 +49,8 @@ const AdminOrders = () => {
           status: 'pending',
           created_at: '2025-06-20T10:30:00Z',
           items: [
-            { pet_id: 1, pet_name: 'Golden Retriever', quantity: 1, price: 599.99 },
-            { pet_id: 3, pet_name: 'Persian Cat', quantity: 1, price: 399.99 }
+            { book_id: 1, book_title: 'The Great Gatsby', quantity: 1, price: 29.99 },
+            { book_id: 3, book_title: 'To Kill a Mockingbird', quantity: 2, price: 49.98 }
           ]
         },
         {
@@ -62,7 +62,7 @@ const AdminOrders = () => {
           status: 'shipped',
           created_at: '2025-06-18T14:15:00Z',
           items: [
-            { pet_id: 2, pet_name: 'Labrador Mix', quantity: 1, price: 499.99 }
+            { book_id: 2, book_title: '1984', quantity: 2, price: 79.98 }
           ]
         },
         {
@@ -74,9 +74,9 @@ const AdminOrders = () => {
           status: 'delivered',
           created_at: '2025-06-15T09:45:00Z',
           items: [
-            { pet_id: 4, pet_name: 'Maine Coon Cat', quantity: 1, price: 699.99 },
-            { pet_id: 5, pet_name: 'Beagle', quantity: 1, price: 549.99 },
-            { pet_id: 6, pet_name: 'Siamese Cat', quantity: 1, price: 449.99 }
+            { book_id: 4, book_title: 'Pride and Prejudice', quantity: 1, price: 24.99 },
+            { book_id: 5, book_title: 'The Hobbit', quantity: 1, price: 49.99 },
+            { book_id: 6, book_title: 'Harry Potter and the Sorcerer\'s Stone', quantity: 1, price: 74.99 }
           ]
         }
       ]);
@@ -492,7 +492,7 @@ const AdminOrders = () => {
                     <thead>
                       <tr>
                         <th className="px-4 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Pet
+                          Book
                         </th>
                         <th className="px-4 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                           Quantity
@@ -509,8 +509,8 @@ const AdminOrders = () => {
                       {currentOrder.items.map((item, index) => (
                         <tr key={index} className="hover:bg-gray-50">
                           <td className="px-4 py-3">
-                            <div className="text-sm font-medium text-gray-900">{item.pet_name || item.book_title}</div>
-                            <div className="text-xs text-gray-500">ID: {item.pet_id || item.book_id}</div>
+                            <div className="text-sm font-medium text-gray-900">{item.book_title}</div>
+                            <div className="text-xs text-gray-500">ID: {item.book_id}</div>
                           </td>
                           <td className="px-4 py-3">
                             <div className="text-sm text-gray-900">{item.quantity}</div>

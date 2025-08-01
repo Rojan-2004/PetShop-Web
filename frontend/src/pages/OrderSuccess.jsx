@@ -46,6 +46,19 @@ const OrderSuccess = () => {
       </div>
     );
   }
+  
+  // This check is a good practice to prevent crashes if 'order' is null after loading
+  if (!order) {
+    return (
+      <div className="container mx-auto px-4 py-16 text-center">
+        <h2 className="text-2xl font-bold text-gray-800">No order found.</h2>
+        <p className="mt-2 text-gray-600">You may have not placed any orders yet.</p>
+        <Link to="/pets" className="mt-4 inline-block px-6 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-900">
+          Continue Shopping
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -135,13 +148,15 @@ const OrderSuccess = () => {
                       {order.items && order.items.map((item, index) => (
                         <tr key={index}>
                           <td className="px-4 py-3 whitespace-nowrap">
+                            {/* CHANGED from item.book_title to item.pet_name */}
                             <div className="text-sm font-medium text-gray-900">{item.pet_name}</div>
                           </td>
                           <td className="px-4 py-3 whitespace-nowrap text-center">
                             <div className="text-sm text-gray-500">{item.quantity}</div>
                           </td>
                           <td className="px-4 py-3 whitespace-nowrap text-right">
-                            <div className="text-sm font-medium text-gray-900">Rs.{item.price.toFixed(2)}</div>
+                            {/* FIXED TypeError by using parseFloat */}
+                            <div className="text-sm font-medium text-gray-900">${parseFloat(item.price).toFixed(2)}</div>
                           </td>
                         </tr>
                       ))}
@@ -152,7 +167,8 @@ const OrderSuccess = () => {
                           Total:
                         </td>
                         <td className="px-4 py-3 text-right text-sm font-bold text-gray-900">
-                          Rs.{order.total_price.toFixed(2)}
+                          {/* FIXED TypeError by using parseFloat */}
+                          ${parseFloat(order.total_price).toFixed(2)}
                         </td>
                       </tr>
                     </tfoot>
@@ -171,6 +187,7 @@ const OrderSuccess = () => {
                   >
                     View Your Orders
                   </Link>
+                  {/* CHANGED the link from /books to /pets */}
                   <Link 
                     to="/pets" 
                     className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"

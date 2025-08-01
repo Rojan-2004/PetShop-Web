@@ -1,353 +1,238 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { petService, cartService } from '../services/api';
-import Notification from '../components/Notification';
 
 const PetDetail = () => {
   const { id } = useParams();
-  const navigate = useNavigate();
   const [pet, setPet] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [notification, setNotification] = useState(null);
-  const [addingToCart, setAddingToCart] = useState(false);
-  const [selectedImage, setSelectedImage] = useState(0);
-
-  const fetchPet = async () => {
-    try {
-      setLoading(true);
-      const response = await petService.getPetById(id);
-      setPet(response.data);
-      setError(null);
-    } catch (err) {
-      console.error('Error fetching pet:', err);
-      setError('Failed to load pet details. Please try again later.');
-      
-      // Mock data for demonstration
-      setPet({
-        id: parseInt(id),
-        name: 'Golden Retriever',
-        breed: 'Retriever',
-        age: 2,
-        price: 599.99,
-        description: 'This beautiful Golden Retriever is a friendly and energetic dog, perfect for families with children. Known for their loyalty and intelligence, Golden Retrievers make excellent companions and are easy to train. This particular pup has been well-socialized and is ready to become a beloved member of your family.',
-        image_url: 'https://images.unsplash.com/photo-1552053831-71594a27632d?w=600&h=600&fit=crop',
-        category: 'dog',
-        weight: '25-30 kg',
-        height: '55-61 cm',
-        color: 'Golden',
-        gender: 'Male',
-        vaccinated: true,
-        health_status: 'Excellent',
-        training_level: 'Basic',
-        good_with_kids: true,
-        good_with_pets: true,
-        energy_level: 'High',
-        grooming_needs: 'Moderate',
-        images: [
-          'https://images.unsplash.com/photo-1552053831-71594a27632d?w=600&h=600&fit=crop',
-          'https://images.unsplash.com/photo-1518717758536-85ae29035b6d?w=600&h=600&fit=crop',
-          'https://images.unsplash.com/photo-1551717743-49959800b1f6?w=600&h=600&fit=crop'
-        ]
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
+  const [quantity, setQuantity] = useState(1);
 
   useEffect(() => {
-    if (id) {
-      fetchPet();
-    }
+    const fetchPet = async () => {
+      try {
+        setLoading(true);
+        // This endpoint should be public - no token required
+        const response = await petService.getPetById(id);
+        setPet(response.data);
+        setError(null);
+      } catch (err) {
+        console.error('Error fetching pet details:', err);
+        setError('Failed to load pet details. Please try again later.');
+        
+        // Mock data for demonstration
+        setPet({
+          id: parseInt(id),
+          name: 'Buddy',
+          breed: 'Golden Retriever',
+          description: 'Buddy is a friendly and energetic Golden Retriever puppy. He loves playing fetch, going on walks, and spending time with his family. He\'s great with kids and other pets, making him the perfect addition to any loving home.',
+          category: 'Dogs',
+          price: 1200.00,
+          stock: 3,
+          image_url: 'https://images.unsplash.com/photo-1552053831-71594a27632d?w=500&h=700&fit=crop',
+          created_at: '2023-01-15T00:00:00Z',
+          age: '8 weeks',
+          size: 'Medium',
+          color: 'Golden',
+          gender: 'Male',
+          vaccinated: true
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPet();
   }, [id]);
 
-  const handleAddToCart = async () => {
-    try {
-      setAddingToCart(true);
-      const token = localStorage.getItem('token');
-      
-      if (!token) {
-        setNotification({
-          message: 'Please login to add pets to your cart.',
-          type: 'error'
-        });
-        setTimeout(() => navigate('/login'), 2000);
-        return;
-      }
-
-      await cartService.addToCart(pet.id, 1);
-      setNotification({
-        message: `${pet.name} has been added to your cart!`,
-        type: 'success'
-      });
-    } catch (err) {
-      console.error('Error adding to cart:', err);
-      setNotification({
-        message: 'Failed to add pet to cart. Please try again.',
-        type: 'error'
-      });
-    } finally {
-      setAddingToCart(false);
+  const handleQuantityChange = (e) => {
+    const value = parseInt(e.target.value);
+    if (value > 0 && value <= (pet?.stock || 0)) {
+      setQuantity(value);
     }
   };
 
-  const getCategoryBadgeColor = (category) => {
-    switch (category?.toLowerCase()) {
-      case 'dog':
-        return 'bg-blue-100 text-blue-800';
-      case 'cat':
-        return 'bg-purple-100 text-purple-800';
-      case 'bird':
-        return 'bg-green-100 text-green-800';
-      case 'rabbit':
-        return 'bg-yellow-100 text-yellow-800';
-      default:
-        return 'bg-gray-100 text-gray-800';
+  const incrementQuantity = () => {
+    if (quantity < (pet?.stock || 0)) {
+      setQuantity(quantity + 1);
+    }
+  };
+
+  const decrementQuantity = () => {
+    if (quantity > 1) {
+      setQuantity(quantity - 1);
+    }
+  };
+
+  const addToCart = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        // Redirect to login if not authenticated
+        window.location.href = '/login';
+        return;
+      }
+      
+      await cartService.addToCart(pet.id, quantity);
+      
+      alert('Pet added to cart successfully!');
+    } catch (err) {
+      console.error('Error adding to cart:', err);
+      alert('Failed to add pet to cart. Please try again.');
     }
   };
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-gray-300 border-t-blue-600"></div>
-          <p className="mt-4 text-xl text-gray-600">Loading pet details...</p>
-        </div>
+      <div className="container mx-auto px-4 py-16 text-center">
+        <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-gray-300 border-t-gray-800"></div>
+        <p className="mt-4 text-xl text-gray-600">Loading pet details...</p>
       </div>
     );
   }
 
   if (error || !pet) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="text-red-500 mb-4">
-            <svg className="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" />
-            </svg>
-          </div>
-          <h3 className="text-xl font-medium text-gray-900 mb-2">Pet not found</h3>
-          <p className="text-gray-600 mb-4">{error || 'The pet you are looking for does not exist.'}</p>
-          <Link 
-            to="/pets" 
-            className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
-          >
-            Back to Catalog
+      <div className="container mx-auto px-4 py-16">
+        <div className="bg-red-50 text-red-700 p-6 rounded-lg border border-red-200 text-center">
+          <h2 className="text-2xl font-bold mb-2">Error</h2>
+          <p>{error || 'Pet not found'}</p>
+          <Link to="/pets" className="mt-4 inline-block px-6 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-900">
+            Back to Pets
           </Link>
         </div>
       </div>
     );
   }
 
-  const images = pet.images || [pet.image_url];
-
   return (
-    <div className="min-h-screen bg-gray-50">
-      {notification && (
-        <Notification 
-          message={notification.message} 
-          type={notification.type} 
-          onClose={() => setNotification(null)} 
-        />
-      )}
+    <div className="container mx-auto px-4 py-8">
+      <div className="mb-6">
+        <Link to="/pets" className="text-gray-600 hover:text-gray-900">
+          &larr; Back to Pets
+        </Link>
+      </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Breadcrumb */}
-        <nav className="flex mb-8" aria-label="Breadcrumb">
-          <ol className="inline-flex items-center space-x-1 md:space-x-3">
-            <li className="inline-flex items-center">
-              <Link to="/" className="text-gray-700 hover:text-blue-600">
-                Home
-              </Link>
-            </li>
-            <li>
-              <div className="flex items-center">
-                <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
-                </svg>
-                <Link to="/pets" className="ml-1 text-gray-700 hover:text-blue-600 md:ml-2">
-                  Pets
-                </Link>
-              </div>
-            </li>
-            <li>
-              <div className="flex items-center">
-                <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
-                </svg>
-                <span className="ml-1 text-gray-500 md:ml-2">{pet.name}</span>
-              </div>
-            </li>
-          </ol>
-        </nav>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          {/* Image Gallery */}
-          <div>
-            <div className="mb-4">
-              <img
-                src={images[selectedImage]?.startsWith('http') ? images[selectedImage] : `http://localhost:3081${images[selectedImage]}`}
-                alt={pet.name}
-                className="w-full h-96 object-cover rounded-xl shadow-lg"
-                onError={(e) => {
-                  e.target.src = 'https://images.unsplash.com/photo-1552053831-71594a27632d?w=600&h=600&fit=crop';
-                }}
-              />
-            </div>
-            {images.length > 1 && (
-              <div className="flex space-x-2 overflow-x-auto">
-                {images.map((image, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setSelectedImage(index)}
-                    className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 ${
-                      selectedImage === index ? 'border-blue-600' : 'border-gray-200'
-                    }`}
-                  >
-                    <img
-                      src={image?.startsWith('http') ? image : `http://localhost:3081${image}`}
-                      alt={`${pet.name} ${index + 1}`}
-                      className="w-full h-full object-cover"
-                      onError={(e) => {
-                        e.target.src = 'https://images.unsplash.com/photo-1552053831-71594a27632d?w=150&h=150&fit=crop';
-                      }}
-                    />
-                  </button>
-                ))}
-              </div>
-            )}
+      <div className="bg-white rounded-lg shadow-md overflow-hidden">
+        <div className="md:flex">
+          {/* Left Column - Pet Image */}
+          <div className="md:w-1/3 p-6 flex justify-center">
+            <img
+              src={pet.image_url || 'https://via.placeholder.com/500x700?text=No+Image'}
+              alt={pet.name}
+              className="h-auto max-h-[500px] object-contain rounded-lg shadow-sm"
+            />
           </div>
 
-          {/* Pet Details */}
-          <div>
-            <div className="mb-4">
-              <span className={`px-3 py-1 rounded-full text-sm font-medium ${getCategoryBadgeColor(pet.category)}`}>
-                {pet.category}
-              </span>
+          {/* Right Column - Pet Details */}
+          <div className="md:w-2/3 p-6">
+            <div className="mb-6">
+              <h1 className="text-3xl font-bold text-gray-800 mb-2">{pet.name}</h1>
+              <p className="text-xl text-gray-600 mb-4">{pet.breed}</p>
+              
+              <div className="flex items-center mb-6">
+                <span className="px-3 py-1 bg-gray-100 text-gray-800 rounded-full text-sm font-medium">
+                  {pet.category}
+                </span>
+                <span className={`ml-4 px-3 py-1 rounded-full text-sm font-medium ${
+                  pet.stock > 10 
+                    ? 'bg-green-100 text-green-800' 
+                    : pet.stock > 0 
+                    ? 'bg-yellow-100 text-yellow-800' 
+                    : 'bg-red-100 text-red-800'
+                }`}>
+                  {pet.stock > 10 
+                    ? 'Available' 
+                    : pet.stock > 0 
+                    ? `Only ${pet.stock} left` 
+                    : 'Not Available'}
+                </span>
+              </div>
+              
+              <p className="text-3xl font-bold text-gray-900 mb-6">
+                ${parseFloat(pet.price || 0).toFixed(2)}
+              </p>
+              
+              <div className="border-t border-b border-gray-200 py-6 mb-6">
+                <p className="text-gray-700 leading-relaxed mb-4">
+                  {pet.description}
+                </p>
+              </div>
+              
+              {pet.stock > 0 && (
+                <div className="mb-6">
+                  <label htmlFor="quantity" className="block text-sm font-medium text-gray-700 mb-2">
+                    Quantity
+                  </label>
+                  <div className="flex">
+                    <button
+                      onClick={decrementQuantity}
+                      className="px-3 py-2 bg-gray-200 rounded-l-lg hover:bg-gray-300"
+                    >
+                      -
+                    </button>
+                    <input
+                      type="number"
+                      id="quantity"
+                      value={quantity}
+                      onChange={handleQuantityChange}
+                      min="1"
+                      max={pet.stock}
+                      className="w-16 px-3 py-2 text-center border-t border-b border-gray-300 focus:outline-none"
+                    />
+                    <button
+                      onClick={incrementQuantity}
+                      className="px-3 py-2 bg-gray-200 rounded-r-lg hover:bg-gray-300"
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+              )}
+              
+              <div className="flex flex-col space-y-3 sm:flex-row sm:space-y-0 sm:space-x-3">
+                <button
+                  onClick={addToCart}
+                  className="px-8 py-3 bg-gray-800 text-white rounded-lg hover:bg-gray-900 transition-colors duration-300 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                  disabled={pet.stock <= 0}
+                >
+                  {pet.stock > 0 ? 'Add to Cart' : 'Not Available'}
+                </button>
+                <Link
+                  to="/cart"
+                  className="px-8 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors duration-300 text-center"
+                >
+                  View Cart
+                </Link>
+              </div>
             </div>
             
-            <h1 className="text-4xl font-bold text-gray-900 mb-2">{pet.name}</h1>
-            <p className="text-xl text-gray-600 mb-4">{pet.breed}</p>
-            
-            <div className="text-3xl font-bold text-blue-600 mb-6">
-              Rs.{pet.price}
-            </div>
-
-            <div className="prose prose-gray max-w-none mb-8">
-              <p>{pet.description}</p>
-            </div>
-
             {/* Pet Specifications */}
-            <div className="bg-white rounded-lg p-6 mb-8 shadow-sm">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Pet Details</h3>
-              <div className="grid grid-cols-2 gap-4">
+            <div className="mt-10 border-t border-gray-200 pt-6">
+              <h2 className="text-xl font-bold text-gray-800 mb-4">Pet Details</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <span className="text-sm text-gray-500">Age</span>
-                  <p className="font-medium">{pet.age} years</p>
+                  <p className="text-gray-600 mb-1">Age:</p>
+                  <p className="font-medium">{pet.age || 'Unknown'}</p>
                 </div>
-                {pet.weight && (
-                  <div>
-                    <span className="text-sm text-gray-500">Weight</span>
-                    <p className="font-medium">{pet.weight}</p>
-                  </div>
-                )}
-                {pet.height && (
-                  <div>
-                    <span className="text-sm text-gray-500">Height</span>
-                    <p className="font-medium">{pet.height}</p>
-                  </div>
-                )}
-                {pet.color && (
-                  <div>
-                    <span className="text-sm text-gray-500">Color</span>
-                    <p className="font-medium">{pet.color}</p>
-                  </div>
-                )}
-                {pet.gender && (
-                  <div>
-                    <span className="text-sm text-gray-500">Gender</span>
-                    <p className="font-medium">{pet.gender}</p>
-                  </div>
-                )}
-                {pet.health_status && (
-                  <div>
-                    <span className="text-sm text-gray-500">Health</span>
-                    <p className="font-medium">{pet.health_status}</p>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Additional Info */}
-            {(pet.good_with_kids || pet.good_with_pets || pet.energy_level || pet.grooming_needs) && (
-              <div className="bg-white rounded-lg p-6 mb-8 shadow-sm">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Characteristics</h3>
-                <div className="space-y-3">
-                  {pet.good_with_kids && (
-                    <div className="flex items-center">
-                      <svg className="w-5 h-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                      </svg>
-                      <span>Good with children</span>
-                    </div>
-                  )}
-                  {pet.good_with_pets && (
-                    <div className="flex items-center">
-                      <svg className="w-5 h-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                      </svg>
-                      <span>Good with other pets</span>
-                    </div>
-                  )}
-                  {pet.energy_level && (
-                    <div className="flex items-center">
-                      <span className="text-sm text-gray-500 mr-2">Energy Level:</span>
-                      <span className="font-medium">{pet.energy_level}</span>
-                    </div>
-                  )}
-                  {pet.grooming_needs && (
-                    <div className="flex items-center">
-                      <span className="text-sm text-gray-500 mr-2">Grooming Needs:</span>
-                      <span className="font-medium">{pet.grooming_needs}</span>
-                    </div>
-                  )}
-                  {pet.vaccinated && (
-                    <div className="flex items-center">
-                      <svg className="w-5 h-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                      </svg>
-                      <span>Fully vaccinated</span>
-                    </div>
-                  )}
+                <div>
+                  <p className="text-gray-600 mb-1">Size:</p>
+                  <p className="font-medium">{pet.size || 'Unknown'}</p>
+                </div>
+                <div>
+                  <p className="text-gray-600 mb-1">Color:</p>
+                  <p className="font-medium">{pet.color || 'Unknown'}</p>
+                </div>
+                <div>
+                  <p className="text-gray-600 mb-1">Gender:</p>
+                  <p className="font-medium">{pet.gender || 'Unknown'}</p>
+                </div>
+                <div>
+                  <p className="text-gray-600 mb-1">Vaccinated:</p>
+                  <p className="font-medium">{pet.vaccinated ? 'Yes' : 'No'}</p>
                 </div>
               </div>
-            )}
-
-            {/* Action Buttons */}
-            <div className="flex space-x-4">
-              <button
-                onClick={handleAddToCart}
-                disabled={addingToCart}
-                className="flex-1 bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {addingToCart ? (
-                  <div className="flex items-center justify-center">
-                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                    Adding...
-                  </div>
-                ) : (
-                  'Add to Cart'
-                )}
-              </button>
-              <button className="px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-lg font-semibold hover:border-gray-400 transition-colors">
-                <svg className="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                </svg>
-                Save
-              </button>
             </div>
           </div>
         </div>

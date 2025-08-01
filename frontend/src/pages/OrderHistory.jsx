@@ -138,9 +138,9 @@ const OrderHistory = () => {
       case 'accepted':
         return 'Great news! Your order has been confirmed and is being prepared for shipping. We\'ll notify you once it\'s on its way.';
       case 'shipped':
-        return 'Your pets are on the way! You should receive them within 7-10 business days.';
+        return 'Your books are on the way! You should receive them within 7-10 business days.';
       case 'delivered':
-        return 'Your order has been delivered. We hope you enjoy your new pets! If there were any issues, please contact our customer service.';
+        return 'Your order has been delivered. We hope you enjoy your books! If there were any issues, please contact our customer service.';
       case 'cancelled':
         return 'This order has been cancelled. If you didn\'t request this cancellation, please contact our customer service.';
       default:
@@ -251,8 +251,8 @@ const OrderHistory = () => {
         <div className="bg-white rounded-lg shadow-md p-8 text-center">
           <h2 className="text-2xl font-medium text-gray-700 mb-4">No orders found</h2>
           <p className="text-gray-500 mb-6">You haven't placed any orders yet.</p>
-          <Link to="/pets" className="inline-block px-6 py-3 bg-gray-800 text-white rounded-lg hover:bg-gray-900">
-            Browse Pets
+          <Link to="/books" className="inline-block px-6 py-3 bg-gray-800 text-white rounded-lg hover:bg-gray-900">
+            Browse Books
           </Link>
         </div>
       ) : (
@@ -322,7 +322,7 @@ const OrderHistory = () => {
                       </div>
                     </td>
                     <td className="px-4 py-4 whitespace-nowrap">
-                      <div className="text-sm font-medium text-gray-900">Rs.{parseFloat(order.total_price || 0).toFixed(2)}</div>
+                      <div className="text-sm font-medium text-gray-900">${parseFloat(order.total_price || 0).toFixed(2)}</div>
                     </td>
                     <td className="px-4 py-4 whitespace-nowrap">
                       <div className="text-sm text-gray-500">{order.items?.length || 0} item(s)</div>
@@ -421,7 +421,7 @@ const OrderHistory = () => {
                     <thead>
                       <tr>
                         <th className="px-4 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Pet
+                          Book
                         </th>
                         <th className="px-4 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                           Quantity
@@ -438,16 +438,16 @@ const OrderHistory = () => {
                       {selectedOrder.items.map((item, index) => (
                         <tr key={index} className="hover:bg-gray-50">
                           <td className="px-4 py-3">
-                            <div className="text-sm font-medium text-gray-900">{item.pet_name || item.book_title}</div>
+                            <div className="text-sm font-medium text-gray-900">{item.book_title}</div>
                           </td>
                           <td className="px-4 py-3 text-center">
                             <div className="text-sm text-gray-500">{item.quantity}</div>
                           </td>
                           <td className="px-4 py-3 text-right">
-                            <div className="text-sm text-gray-500">Rs.{(item.price / item.quantity).toFixed(2)}</div>
+                            <div className="text-sm text-gray-500">${(item.price / item.quantity).toFixed(2)}</div>
                           </td>
                           <td className="px-4 py-3 text-right">
-                            <div className="text-sm font-medium text-gray-900">Rs.{item.price.toFixed(2)}</div>
+                            <div className="text-sm font-medium text-gray-900">${item.price.toFixed(2)}</div>
                           </td>
                         </tr>
                       ))}
@@ -458,7 +458,7 @@ const OrderHistory = () => {
                           Total:
                         </td>
                         <td className="px-4 py-3 text-right text-sm font-bold text-gray-900">
-                          Rs.{parseFloat(selectedOrder.total_price || 0).toFixed(2)}
+                          ${parseFloat(selectedOrder.total_price || 0).toFixed(2)}
                         </td>
                       </tr>
                     </tfoot>
@@ -472,10 +472,10 @@ const OrderHistory = () => {
               <div className="flex justify-end">
                 {selectedOrder.status === 'delivered' && (
                   <Link
-                    to="/pets"
+                    to="/books"
                     className="mr-3 px-4 py-2 text-sm font-medium text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200"
                   >
-                    Adopt Again
+                    Buy Again
                   </Link>
                 )}
                 <button

@@ -29,21 +29,21 @@ const Reviews = () => {
   const testimonials = [
     {
       name: 'Sarah Johnson',
-      text: 'PetShop has transformed my pet adoption experience. The selection is amazing and the adoption process is always smooth!',
+      text: 'KitabCart has transformed my reading experience. The selection is amazing and delivery is always on time!',
       rating: 5,
-      role: 'Pet Lover'
+      role: 'Pet Enthusiast'
     },
     {
       name: 'Ahmed Hassan',
-      text: 'Best online pet shop I have ever used. Great pets and excellent customer service.',
+      text: 'Best online pet shop I have ever used. Great prices and excellent customer service.',
       rating: 5,
       role: 'Regular Customer'
     },
     {
       name: 'Priya Sharma',
-      text: 'Love the user-friendly interface and the quick pet delivery. Highly recommended!',
+      text: 'Love the user-friendly interface and the quick delivery. Highly recommended!',
       rating: 5,
-      role: 'Pet Enthusiast'
+      role: 'Avid Reader'
     }
   ];
 
