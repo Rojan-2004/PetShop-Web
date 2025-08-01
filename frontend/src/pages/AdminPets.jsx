@@ -18,6 +18,8 @@ const AdminPets = () => {
     image_url: '',
     category: 'dog'
   });
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
 
   const fetchPets = async () => {
     try {
@@ -73,10 +75,38 @@ const AdminPets = () => {
     pet.category?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setSelectedImage(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleAddPet = async (e) => {
     e.preventDefault();
     try {
-      await petService.createPet(petForm);
+      const formData = new FormData();
+      
+      // Add all pet data to FormData
+      Object.keys(petForm).forEach(key => {
+        if (key !== 'image_url') {
+          formData.append(key, petForm[key]);
+        }
+      });
+      
+      // Add image file if selected
+      if (selectedImage) {
+        formData.append('image', selectedImage);
+      } else if (petForm.image_url) {
+        formData.append('image_url', petForm.image_url);
+      }
+
+      await petService.createPet(formData);
       setShowAddModal(false);
       setPetForm({
         name: '',
@@ -87,6 +117,8 @@ const AdminPets = () => {
         image_url: '',
         category: 'dog'
       });
+      setSelectedImage(null);
+      setImagePreview(null);
       fetchPets();
     } catch (err) {
       console.error('Error adding pet:', err);
@@ -97,7 +129,23 @@ const AdminPets = () => {
   const handleEditPet = async (e) => {
     e.preventDefault();
     try {
-      await petService.updatePet(currentPet.id, petForm);
+      const formData = new FormData();
+      
+      // Add all pet data to FormData
+      Object.keys(petForm).forEach(key => {
+        if (key !== 'image_url') {
+          formData.append(key, petForm[key]);
+        }
+      });
+      
+      // Add image file if selected
+      if (selectedImage) {
+        formData.append('image', selectedImage);
+      } else if (petForm.image_url) {
+        formData.append('image_url', petForm.image_url);
+      }
+
+      await petService.updatePet(currentPet.id, formData);
       setShowEditModal(false);
       setCurrentPet(null);
       setPetForm({
@@ -109,6 +157,8 @@ const AdminPets = () => {
         image_url: '',
         category: 'dog'
       });
+      setSelectedImage(null);
+      setImagePreview(null);
       fetchPets();
     } catch (err) {
       console.error('Error updating pet:', err);
@@ -139,6 +189,8 @@ const AdminPets = () => {
       image_url: pet.image_url,
       category: pet.category
     });
+    setSelectedImage(null);
+    setImagePreview(null);
     setShowEditModal(true);
   };
 
@@ -228,10 +280,13 @@ const AdminPets = () => {
                     <tr key={pet.id} className="hover:bg-gray-50">
                       <td className="px-4 py-4 whitespace-nowrap">
                         <div className="flex items-center">
-                          <img 
-                            src={pet.image_url} 
+                          <img
+                            src={pet.image_url?.startsWith('http') ? pet.image_url : `http://localhost:3081${pet.image_url}`}
                             alt={pet.name}
                             className="w-12 h-12 rounded-lg object-cover mr-3"
+                            onError={(e) => {
+                              e.target.src = 'https://images.unsplash.com/photo-1552053831-71594a27632d?w=100&h=100&fit=crop';
+                            }}
                           />
                           <div>
                             <div className="text-sm font-medium text-gray-900">{pet.name}</div>
@@ -346,13 +401,34 @@ const AdminPets = () => {
                     </select>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Image URL</label>
-                    <input
-                      type="url"
-                      value={petForm.image_url}
-                      onChange={(e) => setPetForm({...petForm, image_url: e.target.value})}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400"
-                    />
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Pet Image</label>
+                    <div className="space-y-3">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageChange}
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400"
+                      />
+                      {imagePreview && (
+                        <div className="mt-2">
+                          <img
+                            src={imagePreview}
+                            alt="Preview"
+                            className="w-32 h-32 object-cover rounded-lg border border-gray-300"
+                          />
+                        </div>
+                      )}
+                      <div className="text-sm text-gray-500">
+                        Or enter image URL:
+                      </div>
+                      <input
+                        type="url"
+                        value={petForm.image_url}
+                        onChange={(e) => setPetForm({...petForm, image_url: e.target.value})}
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400"
+                        placeholder="https://example.com/image.jpg"
+                      />
+                    </div>
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
@@ -456,13 +532,44 @@ const AdminPets = () => {
                     </select>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Image URL</label>
-                    <input
-                      type="url"
-                      value={petForm.image_url}
-                      onChange={(e) => setPetForm({...petForm, image_url: e.target.value})}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400"
-                    />
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Pet Image</label>
+                    <div className="space-y-3">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageChange}
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400"
+                      />
+                      {imagePreview && (
+                        <div className="mt-2">
+                          <img
+                            src={imagePreview}
+                            alt="Preview"
+                            className="w-32 h-32 object-cover rounded-lg border border-gray-300"
+                          />
+                        </div>
+                      )}
+                      {!imagePreview && currentPet?.image_url && (
+                        <div className="mt-2">
+                          <img
+                            src={currentPet.image_url.startsWith('http') ? currentPet.image_url : `http://localhost:3081${currentPet.image_url}`}
+                            alt="Current"
+                            className="w-32 h-32 object-cover rounded-lg border border-gray-300"
+                          />
+                          <p className="text-sm text-gray-500 mt-1">Current image</p>
+                        </div>
+                      )}
+                      <div className="text-sm text-gray-500">
+                        Or enter image URL:
+                      </div>
+                      <input
+                        type="url"
+                        value={petForm.image_url}
+                        onChange={(e) => setPetForm({...petForm, image_url: e.target.value})}
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400"
+                        placeholder="https://example.com/image.jpg"
+                      />
+                    </div>
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>

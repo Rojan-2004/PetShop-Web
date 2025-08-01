@@ -30,7 +30,7 @@ const Newsletter = () => {
       <div className="text-center mb-6">
         <h3 className="text-xl font-semibold mb-2">Stay Updated</h3>
         <p className="text-gray-300 text-sm">
-          Get the latest updates on new books, features, and admin tools delivered to your inbox.
+          Get the latest updates on new Pets, features, and admin tools delivered to your inbox.
         </p>
       </div>
 

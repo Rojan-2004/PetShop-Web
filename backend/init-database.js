@@ -49,6 +49,17 @@ async function initDatabase() {
       )
     `);
 
+    // Create wishlist table
+    await run(`
+      CREATE TABLE IF NOT EXISTS wishlist (
+          id SERIAL PRIMARY KEY,
+          user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+          pet_id INTEGER REFERENCES pets(id) ON DELETE CASCADE,
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          UNIQUE(user_id, pet_id)
+      )
+    `);
+
     // Create orders table
     await run(`
       CREATE TABLE IF NOT EXISTS orders (
@@ -112,30 +123,29 @@ async function initDatabase() {
           VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
         `, pet);
       }
-      console.log('✅ Sample pets inserted');
+      console.log('✅ Sample pets created');
     } else {
-      console.log('ℹ️ Sample pets already exist');
+      console.log('ℹ️ Pets already exist');
     }
 
-    console.log('🎉 Database initialization completed successfully!');
-
+    console.log('✅ Database initialization completed successfully');
   } catch (error) {
-    console.error('❌ Database initialization failed:', error.message);
+    console.error('❌ Database initialization failed:', error);
     throw error;
   }
 }
 
-// Run if called directly
+// Run initialization if this file is executed directly
 if (require.main === module) {
   initDatabase()
     .then(() => {
-      console.log('Database initialization complete');
+      console.log('🎉 Database setup complete!');
       process.exit(0);
     })
     .catch((error) => {
-      console.error('Database initialization failed:', error);
+      console.error('💥 Database setup failed:', error);
       process.exit(1);
     });
 }
 
-module.exports = initDatabase;
+module.exports = { initDatabase };

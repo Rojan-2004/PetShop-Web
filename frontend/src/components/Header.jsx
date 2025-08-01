@@ -88,14 +88,14 @@ const Header = () => {
                     Dashboard
                   </Link>
                   <Link 
-                    to="/admin/books" 
+                    to="/admin/Pets" 
                     onClick={(e) => {
                       e.preventDefault();
-                      navigateTo('/admin/books');
+                      navigateTo('/admin/Pets');
                     }}
                     className="text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium"
                   >
-                    Books
+                    Pets
                   </Link>
                   <Link 
                     to="/admin/users" 
@@ -240,14 +240,14 @@ const Header = () => {
                     Dashboard
                   </Link>
                   <Link 
-                    to="/admin/books" 
+                    to="/admin/Pets" 
                     onClick={(e) => {
                       e.preventDefault();
-                      navigateTo('/admin/books');
+                      navigateTo('/admin/Pets');
                     }}
                     className="block text-gray-700 hover:text-gray-900 px-3 py-2 text-base font-medium"
                   >
-                    Books
+                    Pets
                   </Link>
                   <Link 
                     to="/admin/users" 

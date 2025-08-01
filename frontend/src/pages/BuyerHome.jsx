@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import LatestCollections from '../components/LatestCollections';
-import { orderService, petService } from '../services/api';
+import { orderService, petService, cartService, wishlistService } from '../services/api';
 import Notification from '../components/Notification';
 
 const BuyerHome = () => {
@@ -83,7 +83,7 @@ const BuyerHome = () => {
             author: pet.breed || "Unknown Breed",
             price: `Rs.${typeof pet.price === 'number' ? pet.price.toFixed(2) : parseFloat(pet.price || 0).toFixed(2)}`,
             originalPrice: `Rs.${(parseFloat(pet.price || 0) * 1.2).toFixed(2)}`,
-            image: pet.image_url || "https://images.unsplash.com/photo-1552053831-71594a27632d?w=150&h=200&fit=crop",
+                            image: pet.image_url?.startsWith('http') ? pet.image_url : `http://localhost:3081${pet.image_url}` || "https://images.unsplash.com/photo-1552053831-71594a27632d?w=150&h=200&fit=crop",
             rating: (4 + Math.random()).toFixed(1),
             reason: "Based on your interests"
           }));
@@ -93,24 +93,38 @@ const BuyerHome = () => {
           setRecommendations([]);
         }
         
-        // In a real app, you'd fetch the wishlist from the API
-        // For now, we'll just use a placeholder
-        setWishlist([
-          {
-            id: 1,
-            title: "Golden Retriever",
-            author: "Retriever",
-            price: "Rs.599.99",
-            image: "https://images.unsplash.com/photo-1552053831-71594a27632d?w=150&h=200&fit=crop"
-          },
-          {
-            id: 2,
-            title: "Persian Cat",
-            author: "Persian",
-            price: "Rs.399.99",
-            image: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=150&h=200&fit=crop"
-          }
-        ]);
+        // Fetch wishlist from API
+        try {
+          const wishlistResponse = await wishlistService.getWishlist();
+          const wishlistData = wishlistResponse.data || [];
+          const formattedWishlist = wishlistData.map(item => ({
+            id: item.id,
+            title: item.title,
+            author: item.breed,
+            price: `Rs.${item.price}`,
+            image: item.image_url
+          }));
+          setWishlist(formattedWishlist);
+        } catch (err) {
+          console.error("Error fetching wishlist:", err);
+          // Use placeholder data if API fails
+          setWishlist([
+            {
+              id: 1,
+              title: "Golden Retriever",
+              author: "Retriever",
+              price: "Rs.599.99",
+              image: "https://images.unsplash.com/photo-1552053831-71594a27632d?w=150&h=200&fit=crop"
+            },
+            {
+              id: 2,
+              title: "Persian Cat",
+              author: "Persian",
+              price: "Rs.399.99",
+              image: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=150&h=200&fit=crop"
+            }
+          ]);
+        }
       } catch (err) {
         console.error("Error fetching data:", err);
         setNotification({
@@ -125,6 +139,31 @@ const BuyerHome = () => {
     fetchData();
   }, []);
 
+  const handleAddToCart = async (petId) => {
+    try {
+      const token = localStorage.getItem('token');
+      
+      if (!token) {
+        setNotification({
+          message: 'Please login to add pets to your cart.',
+          type: 'error'
+        });
+        return;
+      }
+
+      await cartService.addToCart(petId, 1);
+      setNotification({
+        message: 'Pet added to cart successfully!',
+        type: 'success'
+      });
+    } catch (err) {
+      console.error('Error adding to cart:', err);
+      setNotification({
+        message: 'Failed to add pet to cart. Please try again.',
+        type: 'error'
+      });
+    }
+  };
 
   const getStatusColor = (status) => {
     switch (status) {
@@ -478,6 +517,9 @@ const BuyerHome = () => {
                     src={pet.image}
                     alt={pet.title}
                     className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
+                    onError={(e) => {
+                      e.target.src = 'https://images.unsplash.com/photo-1552053831-71594a27632d?w=300&h=400&fit=crop';
+                    }}
                   />
                   <div className="absolute top-3 left-3">
                     <span className="bg-blue-600 text-white px-2 py-1 rounded text-xs font-medium">
@@ -497,7 +539,10 @@ const BuyerHome = () => {
                     <span className="text-xl font-bold text-gray-900">{pet.price}</span>
                     <span className="text-sm text-gray-500 line-through ml-2">{pet.originalPrice}</span>
                   </div>
-                  <button className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors">
+                  <button
+                    onClick={() => handleAddToCart(pet.id)}
+                    className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
+                  >
                     Add to Cart
                   </button>
                 </div>

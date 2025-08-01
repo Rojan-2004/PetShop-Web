@@ -1,58 +1,44 @@
-const { Pool } = require('pg');
-require('dotenv').config();
+const sqlite3 = require('sqlite3').verbose();
+const path = require('path');
 
-// Create PostgreSQL connection pool
-const pool = new Pool({
-  user: 'postgres',
-  host: 'localhost',
-  database: 'Petshop_db',
-  password: 'admin123',
-  port: 5432,
-});
+// Create database file in the backend directory
+const dbPath = path.join(__dirname, '..', 'petshop.db');
 
-// Test the connection
-pool.connect((err, client, release) => {
+const db = new sqlite3.Database(dbPath, (err) => {
   if (err) {
-    console.error('❌ Error connecting to PostgreSQL database:', err.message);
+    console.error('Error opening database:', err.message);
   } else {
-    console.log('✅ Connected to PostgreSQL database');
-    release();
+    console.log('✅ Connected to SQLite database');
   }
 });
 
-// Query function for SELECT operations
-const query = async (sql, params = []) => {
-  try {
-    const result = await pool.query(sql, params);
-    return { rows: result.rows };
-  } catch (error) {
-    console.error('Database query error:', error);
-    throw error;
-  }
+// Promisify database operations
+const query = (sql, params = []) => {
+  return new Promise((resolve, reject) => {
+    db.all(sql, params, (err, rows) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve({ rows });
+      }
+    });
+  });
 };
 
-// Run function for INSERT, UPDATE, DELETE operations
-const run = async (sql, params = []) => {
-  try {
-    const result = await pool.query(sql, params);
-    return { 
-      lastID: result.rows[0]?.id || null, 
-      changes: result.rowCount 
-    };
-  } catch (error) {
-    console.error('Database run error:', error);
-    throw error;
-  }
-};
-
-// Get a client from the pool for transactions
-const getClient = async () => {
-  return await pool.connect();
+const run = (sql, params = []) => {
+  return new Promise((resolve, reject) => {
+    db.run(sql, params, function(err) {
+      if (err) {
+        reject(err);
+      } else {
+        resolve({ lastID: this.lastID, changes: this.changes });
+      }
+    });
+  });
 };
 
 module.exports = {
   query,
   run,
-  pool,
-  getClient
+  db
 };

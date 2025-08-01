@@ -38,6 +38,15 @@ CREATE TABLE IF NOT EXISTS cart (
     UNIQUE(user_id, pet_id)
 );
 
+-- Create wishlist table
+CREATE TABLE IF NOT EXISTS wishlist (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+    pet_id INTEGER REFERENCES pets(id) ON DELETE CASCADE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(user_id, pet_id)
+);
+
 -- Create orders table
 CREATE TABLE IF NOT EXISTS orders (
     id SERIAL PRIMARY KEY,

@@ -150,13 +150,16 @@ const PetCatalog = () => {
             pets.map((pet) => (
               <div key={pet.id} className="bg-white rounded-xl shadow-sm hover:shadow-lg transition-shadow duration-300 overflow-hidden group">
                 <div className="relative overflow-hidden">
-                  <img 
-                    src={pet.image_url} 
+                  <img
+                    src={pet.image_url?.startsWith('http') ? pet.image_url : `http://localhost:3081${pet.image_url}`}
                     alt={pet.name}
                     className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
+                    onError={(e) => {
+                      e.target.src = 'https://images.unsplash.com/photo-1552053831-71594a27632d?w=300&h=400&fit=crop';
+                    }}
                   />
                   <div className="absolute top-4 left-4">
-                    <span className={`px-3 py-1 rounded-full text-xs font-medium Rs{getCategoryBadgeColor(pet.category)}`}>
+                    <span className={`px-3 py-1 rounded-full text-xs font-medium ${getCategoryBadgeColor(pet.category)}`}>
                       {pet.category}
                     </span>
                   </div>
@@ -172,11 +175,11 @@ const PetCatalog = () => {
                   <p className="text-gray-500 text-sm mb-4 line-clamp-2">{pet.description}</p>
                   <div className="flex items-center justify-between">
                     <div className="text-2xl font-bold text-gray-900">
-                      Rs{pet.price}
+                      Rs.{pet.price}
                     </div>
                     <div className="flex space-x-2">
                       <Link
-                        to={`/pets/Rs{pet.id}`}
+                        to={`/pets/${pet.id}`}
                         className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
                       >
                         View Details

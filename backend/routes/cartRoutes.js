@@ -4,11 +4,15 @@ const { verifyToken } = require('../middleware/auth');
 const {
   getUserCart,
   addToCart,
-  removeFromCart
+  updateCartItem,
+  removeFromCart,
+  clearUserCart
 } = require('../controllers/cartController');
 
 router.get('/', verifyToken, getUserCart);
 router.post('/', verifyToken, addToCart);
+router.put('/', verifyToken, updateCartItem);
 router.delete('/:id', verifyToken, removeFromCart);
+router.delete('/', verifyToken, clearUserCart);
 
 module.exports = router;

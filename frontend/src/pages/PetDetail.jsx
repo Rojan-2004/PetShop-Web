@@ -185,10 +185,13 @@ const PetDetail = () => {
           {/* Image Gallery */}
           <div>
             <div className="mb-4">
-              <img 
-                src={images[selectedImage]} 
+              <img
+                src={images[selectedImage]?.startsWith('http') ? images[selectedImage] : `http://localhost:3081${images[selectedImage]}`}
                 alt={pet.name}
                 className="w-full h-96 object-cover rounded-xl shadow-lg"
+                onError={(e) => {
+                  e.target.src = 'https://images.unsplash.com/photo-1552053831-71594a27632d?w=600&h=600&fit=crop';
+                }}
               />
             </div>
             {images.length > 1 && (
@@ -201,10 +204,13 @@ const PetDetail = () => {
                       selectedImage === index ? 'border-blue-600' : 'border-gray-200'
                     }`}
                   >
-                    <img 
-                      src={image} 
+                    <img
+                      src={image?.startsWith('http') ? image : `http://localhost:3081${image}`}
                       alt={`${pet.name} ${index + 1}`}
                       className="w-full h-full object-cover"
+                      onError={(e) => {
+                        e.target.src = 'https://images.unsplash.com/photo-1552053831-71594a27632d?w=150&h=150&fit=crop';
+                      }}
                     />
                   </button>
                 ))}

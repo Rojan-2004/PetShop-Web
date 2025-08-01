@@ -62,6 +62,10 @@ const petService = {
     return await api.get('/admin/pets');
   },
 
+  createPet: async (petData) => {
+    return await api.post('/admin/pets', petData);
+  },
+
   addPet: async (petData) => {
     return await api.post('/admin/pets', petData);
   },
@@ -344,25 +348,140 @@ const orderService = {
 // Cart Services
 const cartService = {
   getCart: async () => {
-    return await api.get('/cart');
+    try {
+      console.log('Fetching cart from API...');
+      const response = await api.get('/cart');
+      console.log('Cart API response:', response.data);
+      return response;
+    } catch (error) {
+      console.error('Cart service error:', error.response?.data || error.message);
+      throw error;
+    }
   },
   
-  addToCart: async (bookId, quantity = 1) => {
-    return await api.post('/cart', { bookId, quantity });
+  addToCart: async (petId, quantity = 1) => {
+    try {
+      console.log('Adding to cart:', { petId, quantity });
+      const response = await api.post('/cart', { petId, quantity });
+      console.log('Add to cart response:', response.data);
+      return response;
+    } catch (error) {
+      console.error('Add to cart error:', error.response?.data || error.message);
+      throw error;
+    }
   },
   
-  updateCartItem: async (bookId, quantity) => {
-    return await api.put('/cart', { bookId, quantity });
+  updateCartItem: async (petId, quantity) => {
+    try {
+      console.log('Updating cart item:', { petId, quantity });
+      const response = await api.put('/cart', { petId, quantity });
+      console.log('Update cart response:', response.data);
+      return response;
+    } catch (error) {
+      console.error('Update cart item error:', error.response?.data || error.message);
+      throw error;
+    }
   },
   
-  removeFromCart: async (bookId) => {
-    return await api.delete(`/cart/${bookId}`);
+  removeFromCart: async (cartItemId) => {
+    try {
+      console.log('Removing from cart:', cartItemId);
+      const response = await api.delete(`/cart/${cartItemId}`);
+      console.log('Remove from cart response:', response.data);
+      return response;
+    } catch (error) {
+      console.error('Remove from cart error:', error.response?.data || error.message);
+      throw error;
+    }
   },
   
   clearCart: async () => {
-    return await api.delete('/cart');
+    try {
+      console.log('Clearing cart...');
+      const response = await api.delete('/cart');
+      console.log('Clear cart response:', response.data);
+      return response;
+    } catch (error) {
+      console.error('Clear cart error:', error.response?.data || error.message);
+      throw error;
+    }
+  }
+};
+
+// Wishlist Services
+const wishlistService = {
+  getWishlist: async () => {
+    try {
+      console.log('Fetching wishlist from API...');
+      const response = await api.get('/wishlist');
+      console.log('Wishlist API response:', response.data);
+      return response;
+    } catch (error) {
+      console.error('Wishlist service error:', error.response?.data || error.message);
+      throw error;
+    }
+  },
+  
+  addToWishlist: async (petId) => {
+    try {
+      console.log('Adding to wishlist:', { petId });
+      const response = await api.post('/wishlist', { petId });
+      console.log('Add to wishlist response:', response.data);
+      return response;
+    } catch (error) {
+      console.error('Add to wishlist error:', error.response?.data || error.message);
+      throw error;
+    }
+  },
+  
+  removeFromWishlist: async (petId) => {
+    try {
+      console.log('Removing from wishlist:', petId);
+      const response = await api.delete(`/wishlist/${petId}`);
+      console.log('Remove from wishlist response:', response.data);
+      return response;
+    } catch (error) {
+      console.error('Remove from wishlist error:', error.response?.data || error.message);
+      throw error;
+    }
+  },
+  
+  checkWishlist: async (petId) => {
+    try {
+      console.log('Checking wishlist:', petId);
+      const response = await api.get(`/wishlist/check/${petId}`);
+      console.log('Check wishlist response:', response.data);
+      return response;
+    } catch (error) {
+      console.error('Check wishlist error:', error.response?.data || error.message);
+      throw error;
+    }
+  },
+  
+  clearWishlist: async () => {
+    try {
+      console.log('Clearing wishlist...');
+      const response = await api.delete('/wishlist');
+      console.log('Clear wishlist response:', response.data);
+      return response;
+    } catch (error) {
+      console.error('Clear wishlist error:', error.response?.data || error.message);
+      throw error;
+    }
+  },
+  
+  getWishlistCount: async () => {
+    try {
+      console.log('Getting wishlist count...');
+      const response = await api.get('/wishlist/count');
+      console.log('Wishlist count response:', response.data);
+      return response;
+    } catch (error) {
+      console.error('Wishlist count error:', error.response?.data || error.message);
+      throw error;
+    }
   }
 };
 
 export default api;
-export { authService, petService, userService, orderService, cartService };
+export { authService, petService, userService, orderService, cartService, wishlistService };
