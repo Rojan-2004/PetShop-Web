@@ -1,12 +1,12 @@
-const db = require('../db');
+const { query, run } = require('../db');
 
 // Get cart items for a user (with pet details)
 async function getCartItems(userId) {
-  const result = await db.query(`
+  const result = await query(`
     SELECT c.id, c.quantity, p.id AS pet_id, p.name AS title, p.price, p.image_url
     FROM cart c
     JOIN pets p ON c.pet_id = p.id
-    WHERE c.user_id = $1
+    WHERE c.user_id = ?
   `, [userId]);
   return result.rows;
 }
@@ -14,42 +14,48 @@ async function getCartItems(userId) {
 // Add or update cart item
 async function addOrUpdateCartItem(userId, petId, quantity) {
   // Try updating first
-  const updateResult = await db.query(`
-    UPDATE cart SET quantity = quantity + $3
-    WHERE user_id = $1 AND pet_id = $2
-    RETURNING *
-  `, [userId, petId, quantity]);
+  const updateResult = await query(`
+    UPDATE cart SET quantity = quantity + ?
+    WHERE user_id = ? AND pet_id = ?
+  `, [quantity, userId, petId]);
 
-  if (updateResult.rowCount === 0) {
+  if (updateResult.changes === 0) {
     // Insert new if no update happened
-    const insertResult = await db.query(`
+    const insertResult = await run(`
       INSERT INTO cart (user_id, pet_id, quantity)
-      VALUES ($1, $2, $3) RETURNING *
+      VALUES (?, ?, ?)
     `, [userId, petId, quantity]);
-    return insertResult.rows[0];
+    
+    // Get the inserted item
+    const insertedItem = await query('SELECT * FROM cart WHERE id = ?', [insertResult.lastID]);
+    return insertedItem.rows[0];
   }
-  return updateResult.rows[0];
+  
+  // Get the updated item
+  const updatedItem = await query('SELECT * FROM cart WHERE user_id = ? AND pet_id = ?', [userId, petId]);
+  return updatedItem.rows[0];
 }
 
 // Update cart item quantity (set absolute quantity)
 async function updateCartItemQuantity(userId, petId, quantity) {
-  const updateResult = await db.query(`
-    UPDATE cart SET quantity = $3
-    WHERE user_id = $1 AND pet_id = $2
-    RETURNING *
-  `, [userId, petId, quantity]);
+  await query(`
+    UPDATE cart SET quantity = ?
+    WHERE user_id = ? AND pet_id = ?
+  `, [quantity, userId, petId]);
   
-  return updateResult.rows[0];
+  // Get the updated item
+  const updatedItem = await query('SELECT * FROM cart WHERE user_id = ? AND pet_id = ?', [userId, petId]);
+  return updatedItem.rows[0];
 }
 
 // Remove cart item
 async function removeCartItem(cartItemId) {
-  await db.query(`DELETE FROM cart WHERE id = $1`, [cartItemId]);
+  await query(`DELETE FROM cart WHERE id = ?`, [cartItemId]);
 }
 
 // Clear all cart items for user (after checkout)
 async function clearCart(userId) {
-  await db.query(`DELETE FROM cart WHERE user_id = $1`, [userId]);
+  await query(`DELETE FROM cart WHERE user_id = ?`, [userId]);
 }
 
 module.exports = {

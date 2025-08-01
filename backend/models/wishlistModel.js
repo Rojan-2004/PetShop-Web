@@ -1,17 +1,23 @@
-const db = require('../db');
+const { query, run } = require('../db');
 
 const wishlistModel = {
   // Add pet to wishlist
   addToWishlist: async (userId, petId) => {
     try {
-      const query = `
+      // Check if already exists
+      const existing = await query('SELECT id FROM wishlist WHERE user_id = ? AND pet_id = ?', [userId, petId]);
+      if (existing.rows.length > 0) {
+        return existing.rows[0];
+      }
+      
+      const result = await run(`
         INSERT INTO wishlist (user_id, pet_id) 
-        VALUES ($1, $2) 
-        ON CONFLICT (user_id, pet_id) DO NOTHING
-        RETURNING *
-      `;
-      const result = await db.query(query, [userId, petId]);
-      return result.rows[0];
+        VALUES (?, ?)
+      `, [userId, petId]);
+      
+      // Get the inserted item
+      const insertedItem = await query('SELECT * FROM wishlist WHERE id = ?', [result.lastID]);
+      return insertedItem.rows[0];
     } catch (error) {
       console.error('Error adding to wishlist:', error);
       throw error;
@@ -21,7 +27,7 @@ const wishlistModel = {
   // Get user's wishlist with pet details
   getUserWishlist: async (userId) => {
     try {
-      const query = `
+      const queryText = `
         SELECT 
           w.id,
           w.user_id,
@@ -38,10 +44,10 @@ const wishlistModel = {
           p.image_url
         FROM wishlist w
         JOIN pets p ON w.pet_id = p.id
-        WHERE w.user_id = $1
+        WHERE w.user_id = ?
         ORDER BY w.created_at DESC
       `;
-      const result = await db.query(query, [userId]);
+      const result = await query(queryText, [userId]);
       return result.rows;
     } catch (error) {
       console.error('Error getting user wishlist:', error);
@@ -52,13 +58,11 @@ const wishlistModel = {
   // Remove pet from wishlist
   removeFromWishlist: async (userId, petId) => {
     try {
-      const query = `
+      await query(`
         DELETE FROM wishlist 
-        WHERE user_id = $1 AND pet_id = $2
-        RETURNING *
-      `;
-      const result = await db.query(query, [userId, petId]);
-      return result.rows[0];
+        WHERE user_id = ? AND pet_id = ?
+      `, [userId, petId]);
+      return { success: true };
     } catch (error) {
       console.error('Error removing from wishlist:', error);
       throw error;
@@ -68,11 +72,10 @@ const wishlistModel = {
   // Check if pet is in user's wishlist
   isInWishlist: async (userId, petId) => {
     try {
-      const query = `
+      const result = await query(`
         SELECT id FROM wishlist 
-        WHERE user_id = $1 AND pet_id = $2
-      `;
-      const result = await db.query(query, [userId, petId]);
+        WHERE user_id = ? AND pet_id = ?
+      `, [userId, petId]);
       return result.rows.length > 0;
     } catch (error) {
       console.error('Error checking wishlist:', error);
@@ -83,13 +86,11 @@ const wishlistModel = {
   // Clear user's wishlist
   clearWishlist: async (userId) => {
     try {
-      const query = `
+      await query(`
         DELETE FROM wishlist 
-        WHERE user_id = $1
-        RETURNING *
-      `;
-      const result = await db.query(query, [userId]);
-      return result.rows;
+        WHERE user_id = ?
+      `, [userId]);
+      return { success: true };
     } catch (error) {
       console.error('Error clearing wishlist:', error);
       throw error;
@@ -99,12 +100,11 @@ const wishlistModel = {
   // Get wishlist count for user
   getWishlistCount: async (userId) => {
     try {
-      const query = `
+      const result = await query(`
         SELECT COUNT(*) as count 
         FROM wishlist 
-        WHERE user_id = $1
-      `;
-      const result = await db.query(query, [userId]);
+        WHERE user_id = ?
+      `, [userId]);
       return parseInt(result.rows[0].count);
     } catch (error) {
       console.error('Error getting wishlist count:', error);

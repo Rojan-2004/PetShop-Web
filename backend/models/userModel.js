@@ -2,7 +2,7 @@ const { query, run } = require('../db');
 
 // 🔍 Find user by email (used in login)
 async function findUserByEmail(email) {
-  const result = await query('SELECT * FROM users WHERE email = $1', [email]);
+  const result = await query('SELECT * FROM users WHERE email = ?', [email]);
   return result.rows[0];
 }
 
@@ -10,12 +10,12 @@ async function findUserByEmail(email) {
 async function createUser(name, email, hashedPassword, role) {
   const result = await run(
     `INSERT INTO users (name, email, password, role)
-     VALUES ($1, $2, $3, $4) RETURNING id`,
+     VALUES (?, ?, ?, ?)`,
     [name, email, hashedPassword, role]
   );
   
   // Get the inserted user
-  const insertedUser = await query('SELECT * FROM users WHERE id = $1', [result.rows[0].id]);
+  const insertedUser = await query('SELECT * FROM users WHERE id = ?', [result.lastID]);
   return insertedUser.rows[0];
 }
 
@@ -33,13 +33,13 @@ async function fetchAllUsers() {
 // ✏️ Update user role (admin can promote to seller/admin)
 async function changeUserRole(userId, newRole) {
   await run(
-    `UPDATE users SET role = $1 WHERE id = $2`,
+    `UPDATE users SET role = ? WHERE id = ?`,
     [newRole, userId]
   );
   
   // Get the updated user
   const updatedUser = await query(
-    'SELECT id, name, email, role FROM users WHERE id = $1',
+    'SELECT id, name, email, role FROM users WHERE id = ?',
     [userId]
   );
   return updatedUser.rows[0];
@@ -47,19 +47,19 @@ async function changeUserRole(userId, newRole) {
 
 // ❌ Delete a user
 async function removeUser(userId) {
-  await run(`DELETE FROM users WHERE id = $1`, [userId]);
+  await run(`DELETE FROM users WHERE id = ?`, [userId]);
 }
 
 // ✏️ Update user information (admin can edit name and email)
 async function updateUserInfo(userId, name, email) {
   await run(
-    `UPDATE users SET name = $1, email = $2 WHERE id = $3`,
+    `UPDATE users SET name = ?, email = ? WHERE id = ?`,
     [name, email, userId]
   );
   
   // Get the updated user
   const updatedUser = await query(
-    'SELECT id, name, email, role FROM users WHERE id = $1',
+    'SELECT id, name, email, role FROM users WHERE id = ?',
     [userId]
   );
   return updatedUser.rows[0];

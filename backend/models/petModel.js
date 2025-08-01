@@ -10,12 +10,12 @@ async function createPet(pet) {
   
   const result = await run(
     `INSERT INTO pets (name, species, breed, age, description, category, price, stock, image_url)
-     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING id`,
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     [name, petSpecies, breed, age, description, category, price, petStock, image_url]
   );
   
   // Get the inserted pet
-  const insertedPet = await query('SELECT * FROM pets WHERE id = $1', [result.rows[0].id]);
+  const insertedPet = await query('SELECT * FROM pets WHERE id = ?', [result.lastID]);
   return insertedPet.rows[0];
 }
 
@@ -28,19 +28,19 @@ async function updatePet(id, updates) {
   const petStock = stock || 1;
   
   await run(
-    `UPDATE pets SET name=$1, species=$2, breed=$3, age=$4, description=$5,
-     category=$6, price=$7, stock=$8, image_url=$9 WHERE id=$10`,
+    `UPDATE pets SET name=?, species=?, breed=?, age=?, description=?,
+     category=?, price=?, stock=?, image_url=? WHERE id=?`,
     [name, petSpecies, breed, age, description, category, price, petStock, image_url, id]
   );
   
   // Get the updated pet
-  const updatedPet = await query('SELECT * FROM pets WHERE id = $1', [id]);
+  const updatedPet = await query('SELECT * FROM pets WHERE id = ?', [id]);
   return updatedPet.rows[0];
 }
 
 // Delete pet
 async function deletePet(id) {
-  await run(`DELETE FROM pets WHERE id = $1`, [id]);
+  await run(`DELETE FROM pets WHERE id = ?`, [id]);
 }
 
 // Get all pets
@@ -51,7 +51,7 @@ async function getAllPets() {
 
 // Get pet by ID
 async function getPetById(id) {
-  const result = await query('SELECT * FROM pets WHERE id = $1', [id]);
+  const result = await query('SELECT * FROM pets WHERE id = ?', [id]);
   return result.rows[0];
 }
 

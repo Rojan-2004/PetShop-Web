@@ -67,10 +67,10 @@ export default function SignupPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="flex min-h-[calc(100vh-64px)]">
-        {/* Left Side - Pet Adoption Illustration */}
+        {/* Left Side - Book Reading Illustration */}
         <div className="hidden lg:flex flex-1 bg-gradient-to-br from-gray-100 to-gray-200 items-center justify-center p-12">
           <div className="max-w-lg w-full">
-            {/* Beautiful Pet Vector */}
+            {/* Beautiful Book Vector */}
             <svg
               viewBox="0 0 500 500"
               className="w-full h-auto max-w-md mx-auto"
@@ -79,23 +79,23 @@ export default function SignupPage() {
               {/* Background Circle */}
               <circle cx="250" cy="250" r="200" fill="#F3F4F6" opacity="0.1" />
               
-              {/* Stack of Pets */}
+              {/* Stack of Books */}
               <g transform="translate(100, 150)">
-                {/* Pet 1 - Large pet at bottom */}
+                {/* Book 1 - Large book at bottom */}
                 <rect x="0" y="160" width="300" height="40" rx="4" fill="#4B5563" />
                 <rect x="10" y="165" width="280" height="30" rx="2" fill="#6B7280" />
                 <text x="150" y="185" textAnchor="middle" fill="white" fontSize="14">
                   Adventure Stories
                 </text>
 
-                {/* Pet 2 */}
+                {/* Book 2 */}
                 <rect x="20" y="120" width="260" height="35" rx="4" fill="#6B7280" />
                 <rect x="25" y="125" width="250" height="25" rx="2" fill="#9CA3AF" />
                 <text x="150" y="142" textAnchor="middle" fill="white" fontSize="12">
                   Mystery Tales
                 </text>
 
-                {/* Pet 3 */}
+                {/* Book 3 */}
                 <rect x="40" y="85" width="220" height="30" rx="4" fill="#9CA3AF" />
                 <rect x="45" y="90" width="210" height="20" rx="2" fill="#D1D5DB" />
                 <text x="150" y="104" textAnchor="middle" fill="#4B5563" fontSize="10">
@@ -109,7 +109,7 @@ export default function SignupPage() {
                   <circle cx="290" cy="90" r="2" fill="#FCD34D" opacity="0.8" />
                   <circle cx="150" cy="40" r="2" fill="#FCD34D" opacity="0.7" />
                   
-                  {/* Flying paws */}
+                  {/* Flying pages */}
                   <path d="M30,60 Q40,50 50,60 Q45,70 30,60" fill="white" opacity="0.6" />
                   <path d="M260,80 Q270,70 280,80 Q275,90 260,80" fill="white" opacity="0.8" />
                 </g>
@@ -122,9 +122,9 @@ export default function SignupPage() {
                   <line x1="-25" y1="0" x2="-15" y2="-5" stroke="#6B7280" strokeWidth="2" />
                 </g>
 
-                {/* Floating Pets Around */}
+                {/* Floating Books Around */}
                 <g opacity="0.7">
-                  {/* Small Floating Pets */}
+                  {/* Small Floating Books */}
                   <rect x="-20" y="-70" width="30" height="20" rx="2" fill="#1F2937" transform="rotate(-15)" />
                   <rect x="190" y="-50" width="25" height="18" rx="2" fill="#4B5563" transform="rotate(20)" />
                   <rect x="210" y="100" width="28" height="22" rx="2" fill="#374151" transform="rotate(-25)" />
@@ -145,7 +145,7 @@ export default function SignupPage() {
                 Join Our Reading Community
               </h3>
               <p className="text-gray-600 leading-relaxed">
-                Create your account and become part of a thriving community of pet lovers. 
+                Create your account and become part of a thriving community of book lovers. 
                 Get personalized recommendations, track your reading progress, and discover new favorites.
               </p>
             </div>
@@ -156,7 +156,7 @@ export default function SignupPage() {
                 <div className="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center">
                   <span className="text-white text-sm">✓</span>
                 </div>
-                <span className="text-gray-700">Personalized pet recommendations</span>
+                <span className="text-gray-700">Personalized book recommendations</span>
               </div>
               <div className="flex items-center space-x-3">
                 <div className="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center">

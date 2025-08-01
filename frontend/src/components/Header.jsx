@@ -247,7 +247,6 @@ const Header = () => {
                     }}
                     className="block text-gray-700 hover:text-gray-900 px-3 py-2 text-base font-medium"
                   >
-                    Pets
                   </Link>
                   <Link 
                     to="/admin/users" 
